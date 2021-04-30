@@ -1,0 +1,11 @@
+FROM python:3.6
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir /work
+ADD ./configs.py /work
+ADD ./fr_service.py /work
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install redis
+RUN pip install numpy
+CMD python -u /work/fr_service.py

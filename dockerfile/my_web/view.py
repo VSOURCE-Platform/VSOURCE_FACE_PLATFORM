@@ -4,12 +4,14 @@
 # @Function : TODO
 
 from flask import request
-from app import app, mongo
+from app import app, db
 
 import uuid
 import json
 import redis
+
 import configs
+
 
 @app.route('/face_service', methods=['GET'])
 def user_call_face_service():
@@ -42,10 +44,10 @@ def get_result():
         uu_id = request.args.get('id')
         uu_id = str(uu_id)
 
-        r = redis.Redis(host=configs.app_redis_hostname, port=configs.app_redis_port)
-
-        result = r.get(uu_id)
-        result = str(result, encoding='utf-8')
+        auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
+        print(auth_ans)
+        result = db[configs.app_database_table].find_one({'id': uu_id})
+        result.pop('_id')
         ans['result'] = result
     except Exception as e:
         ans['status'] = 500

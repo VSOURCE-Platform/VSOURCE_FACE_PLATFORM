@@ -4,16 +4,17 @@
 # @Function : TODO
 
 from flask import Flask
-from flask_pymongo import PyMongo
+import pymongo
 
 import configs
+
 
 def create_app():
     app = Flask(__name__)
     app.secret_key           = configs.app_secret_key
-    app.config['MONGO_URI']  = configs.app_mongo_uri
 
-    mongo = PyMongo(app=app)
-    return app, mongo
+    client = pymongo.MongoClient(host=configs.app_database_host, port=configs.app_database_port)
+    db = client[configs.app_database_name]
+    return app, db
 
-app, mongo = create_app()
+app, db = create_app()

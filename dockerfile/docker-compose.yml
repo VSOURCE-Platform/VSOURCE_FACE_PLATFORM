@@ -4,12 +4,37 @@ services:
     build: ./my_redis
     ports:
       - "6379:6379"
-#  my_mongo:
-#    build: ./my_mongo
-#    volumes:
-#      - "../mongo_db:/data/db"
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: my_root
-#      MONGO_INITDB_ROOT_PASSWORD: my_123456
+
+  my_mongo:
+    build: ./my_mongo
+    volumes:
+      - "../mongo_db:/data/db"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: my_root
+      MONGO_INITDB_ROOT_PASSWORD: my_123456
+
+  result_service:
+    build: ./result_service
+    links:
+      - my_redis
+      - my_mongo
+
+  fr_service:
+    build: ./fr_service
+    links:
+      - my_redis
+
+  my_web:
+    build: ./my_web
+    ports:
+      - "12349:12349"
+    volumes:
+      - ./my_web:/home
+    expose:
+      - "12349"
+    links:
+      - my_redis
+      - my_mongo
+

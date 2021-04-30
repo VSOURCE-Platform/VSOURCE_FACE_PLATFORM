@@ -5,7 +5,8 @@ import traceback
 
 
 import numpy as np
-import configs
+from dockerfile.my_web import configs
+
 
 def face_recognition(face_image1, face_image2):
     time.sleep(5)

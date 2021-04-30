@@ -4,15 +4,19 @@ import redis
 import traceback
 import pymongo
 
-import configs
+from dockerfile.my_web import configs
+
 
 class Service:
     def __init__(self):
         self.redis_host = configs.app_redis_hostname
         self.redis_port = configs.app_redis_port
         self.RESPONSE_KEY = configs.app_response_key
-        self.mongo_uri  = configs.app_mongo_uri
+        self.mongo_host  = configs.app_database_host
+        self.mongo_port  = configs.app_database_port
         self.mongo_db   = configs.app_database_name
+        self.mongo_user  = configs.app_database_user
+        self.mongo_pwd   = configs.app_database_pwd
         self.mongo_table = configs.app_database_table_name
 
     def start(self):
@@ -31,8 +35,14 @@ class Service:
                 now_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
                 response['collected_time'] = now_time
 
-                response_str = json.dumps(response)
-                assert r.set(response['id'], response_str)
+                client = pymongo.MongoClient(host=self.mongo_host, port=self.mongo_port)
+                db = client[self.mongo_db]
+                db.authenticate(name=self.mongo_user, password=self.mongo_pwd)
+                table = db[self.mongo_table]
+                table.insert_one(response)
+
+                # response_str = json.dumps(response)
+                # assert r.set(response['id'], response_str)
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)
