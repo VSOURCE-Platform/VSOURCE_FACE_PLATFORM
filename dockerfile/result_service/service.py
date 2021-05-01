@@ -4,7 +4,7 @@ import redis
 import traceback
 import pymongo
 
-from dockerfile.my_web import configs
+import configs
 
 
 class Service:

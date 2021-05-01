@@ -5,7 +5,7 @@ import traceback
 
 
 import numpy as np
-from dockerfile.my_web import configs
+import configs
 
 
 def face_recognition(face_image1, face_image2):
