@@ -3,9 +3,11 @@ FROM python:3.6
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN mkdir /work
-ADD ./configs.py /work
-ADD ./fr_service.py /work
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-RUN pip install redis
-RUN pip install numpy
+RUN pip install --upgrade pip
+RUN pip install opencv-python==3.4.2.17
+RUN pip install tensorflow==1.11.0
+RUN pip install redis==3.5.3
+RUN pip install numpy==1.18.5
+# RUN pip install requirements.txt
 CMD python -u /work/fr_service.py

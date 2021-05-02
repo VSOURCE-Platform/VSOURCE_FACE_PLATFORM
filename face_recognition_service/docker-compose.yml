@@ -23,6 +23,8 @@ services:
 
   fr_service:
     build: ./fr_service
+    volumes:
+      - ./fr_service:/work
     links:
       - my_redis
 

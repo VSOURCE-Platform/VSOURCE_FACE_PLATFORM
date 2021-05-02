@@ -3,14 +3,9 @@ import json
 import redis
 import traceback
 
-
-import numpy as np
 import configs
 
-
-def face_recognition(face_image1, face_image2):
-    time.sleep(5)
-    return np.random.randint(0, 100) / 100
+from face_recognition_native_api.face_api import face_recognition
 
 class Service:
     def __init__(self):
@@ -44,3 +39,8 @@ class Service:
 if __name__ == '__main__':
     service = Service()
     service.start()
+
+    # face1 = './work/face_recognition_native_api/tmp/0006_01.jpg'
+    # face2 = './work/face_recognition_native_api/tmp/0007_01.jpg'
+    # score = face_recognition(face1, face2)
+    # print(score)
