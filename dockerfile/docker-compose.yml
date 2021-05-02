@@ -26,6 +26,11 @@ services:
     links:
       - my_redis
 
+  fr_service2:
+    build: ./fr_service
+    links:
+      - my_redis
+
   my_web:
     build: ./my_web
     ports:

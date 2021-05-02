@@ -7,7 +7,6 @@ import traceback
 import numpy as np
 import configs
 
-
 def face_recognition(face_image1, face_image2):
     time.sleep(5)
     return np.random.randint(0, 100) / 100

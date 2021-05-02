@@ -22,7 +22,7 @@ app_database_pwd  = 'xcy123456'
 app_database_port = 27017
 
 app_database_table_name = 'face_list'
-
+call_interval = 3
 app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
     app_database_user,
     app_database_pwd,
