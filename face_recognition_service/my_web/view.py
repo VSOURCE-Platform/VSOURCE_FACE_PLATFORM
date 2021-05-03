@@ -9,8 +9,11 @@ from app import app, db
 import uuid
 import json
 import redis
+import kafka
+import traceback
 
 import configs
+
 
 
 @app.route('/face_service', methods=['GET'])
@@ -27,8 +30,13 @@ def user_call_face_service():
         }
         info_str = json.dumps(info)
 
-        r = redis.Redis(host=configs.app_redis_hostname, port=configs.app_redis_port)
-        r.rpush(configs.app_info_key, info_str)
+        producer = kafka.KafkaProducer(bootstrap_servers=[configs.app_kafka_host])
+        future = producer.send(configs.app_kafka_topic, key=bytes(configs.app_kafka_key, encoding='utf-8'), value=bytes(info_str, encoding='utf-8'))
+        producer.close()
+        try:
+            future.get(timeout=5) # 监控是否发送成功
+        except Exception as e:  # 发送失败抛出kafka_errors
+            traceback.format_exc()
 
         ans['id'] = info['id']
     except Exception as e:

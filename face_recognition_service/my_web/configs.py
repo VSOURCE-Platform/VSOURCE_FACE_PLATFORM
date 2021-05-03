@@ -13,6 +13,10 @@ app_redis_port     = 6379
 app_info_key = 'INFO_KEY'
 app_response_key = 'RESPONSE_KEY'
 
+app_kafka_host = 'my_kafka:9092'
+app_kafka_topic = 'user_queue'
+app_kafka_key = 'user_requests'
+
 
 app_database_host = 'my_mongo' # if don't use docker, so this is 'localhost'
 app_database_name = 'face_recognition'

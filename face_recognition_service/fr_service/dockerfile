@@ -9,5 +9,6 @@ RUN pip install opencv-python==3.4.2.17
 RUN pip install tensorflow==1.11.0
 RUN pip install redis==3.5.3
 RUN pip install numpy==1.18.5
+RUN pip install kafka-python
 # RUN pip install requirements.txt
 CMD python -u /work/fr_service.py

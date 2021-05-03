@@ -5,6 +5,23 @@ services:
     ports:
       - "6379:6379"
 
+  my_zookeeper:
+    build: ./my_zookeeper
+    ports:
+      - "2181:2181"
+
+  my_kafka:
+    build: ./my_kafka
+    ports:
+      - "9092:9092"
+    links:
+      - my_zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: my_zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: my_kafka
+#      KAFKA_ADVERTISED_PORT: 9092
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://0.0.0.0:9092
+#      KAFKA_LISTENERS: PLAINTEXT://:9092
   my_mongo:
     build: ./my_mongo
     volumes:
@@ -27,6 +44,7 @@ services:
       - ./fr_service:/work
     links:
       - my_redis
+      - my_kafka
 
   my_web:
     build: ./my_web
@@ -39,4 +57,4 @@ services:
     links:
       - my_redis
       - my_mongo
-
+      - my_kafka

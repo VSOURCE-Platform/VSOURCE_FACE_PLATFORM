@@ -1,7 +1,9 @@
 import time
 import json
 import redis
+import kafka
 import traceback
+
 
 import configs
 
@@ -15,21 +17,25 @@ class Service:
         self.RESPONSE_KEY = configs.app_response_key
 
     def start(self):
+        print('FR SERVICE RUNNING...')
         while True:
             try:
-                r = redis.Redis(host=self.redis_host, port=self.redis_port)
-                info_str = r.lpop(self.INFO_KEY)
-                if not info_str or info_str is None:
-                    time.sleep(configs.call_interval)
-                    continue
+                consumer = kafka.KafkaConsumer(configs.app_kafka_topic, bootstrap_servers=[configs.app_kafka_host])
+                for msg in consumer:
+                    info_str = msg.value
+                    r = redis.Redis(host=self.redis_host, port=self.redis_port)
+                    # info_str = r.lpop(self.INFO_KEY)
+                    if not info_str or info_str is None:
+                        time.sleep(configs.call_interval)
+                        continue
 
-                info_str = str(info_str, encoding = "utf-8")
-                print(info_str)
-                info = json.loads(info_str)
-                score = face_recognition(info['face1'], info['face2'])
-                ans = {'id': info['id'], 'score': str(score)}
-                ans_str = json.dumps(ans)
-                assert r.rpush(self.RESPONSE_KEY, ans_str)
+                    info_str = str(info_str, encoding = "utf-8")
+                    print(info_str)
+                    info = json.loads(info_str)
+                    score = face_recognition(info['face1'], info['face2'])
+                    ans = {'id': info['id'], 'score': str(score)}
+                    ans_str = json.dumps(ans)
+                    assert r.rpush(self.RESPONSE_KEY, ans_str)
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)
