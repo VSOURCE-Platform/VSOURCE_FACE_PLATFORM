@@ -6,8 +6,11 @@
 from .face_score import FaceScore
 from . import configs as configs
 
-def face_recognition(face_path1, face_path2):
-    fs = FaceScore(params=configs.face_recognition_params)
+def get_fs_object():
+    return FaceScore(params=configs.face_recognition_params)
+
+def face_recognition(fs, face_path1, face_path2):
+    # fs = FaceScore(params=configs.face_recognition_params)
     return fs.cal_score(face_path1, face_path2)
 
 if __name__ == '__main__':

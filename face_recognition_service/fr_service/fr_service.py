@@ -7,7 +7,7 @@ import traceback
 
 import configs
 
-from face_recognition_native_api.face_api import face_recognition
+from face_recognition_native_api.face_api import get_fs_object, face_recognition
 
 class Service:
     def __init__(self):
@@ -18,13 +18,16 @@ class Service:
 
     def start(self):
         print('FR SERVICE RUNNING...')
+        print('GET FS OBJECT...')
+        fs = get_fs_object()
+        print('GET FS OBJECT OK!')
         while True:
             try:
                 consumer = kafka.KafkaConsumer(configs.app_kafka_topic, bootstrap_servers=[configs.app_kafka_host])
                 for msg in consumer:
                     info_str = msg.value
                     r = redis.Redis(host=self.redis_host, port=self.redis_port)
-                    # info_str = r.lpop(self.INFO_KEY)
+
                     if not info_str or info_str is None:
                         time.sleep(configs.call_interval)
                         continue
@@ -32,7 +35,7 @@ class Service:
                     info_str = str(info_str, encoding = "utf-8")
                     print(info_str)
                     info = json.loads(info_str)
-                    score = face_recognition(info['face1'], info['face2'])
+                    score = face_recognition(fs, info['face1'], info['face2'])
                     ans = {'id': info['id'], 'score': str(score)}
                     ans_str = json.dumps(ans)
                     assert r.rpush(self.RESPONSE_KEY, ans_str)
