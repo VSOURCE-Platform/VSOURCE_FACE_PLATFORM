@@ -1,0 +1,14 @@
+FROM python:3.6
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 设置工作区
+RUN mkdir -p /home
+WORKDIR /home
+# 添加依赖
+COPY requirements.txt /home/requirements.txt
+RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+# 使用gunicorn启动应用
+CMD gunicorn -w 4 -b 0.0.0.0:12349 run:app

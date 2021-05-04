@@ -1,0 +1,8 @@
+FROM wurstmeister/kafka:latest
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV AUTO_RUN_DIR /docker-entrypoint-initdb.d
+ENV INSTALL_MONGO_SHELL setup.sh
+COPY ./$INSTALL_MONGO_SHELL $AUTO_RUN_DIR/
