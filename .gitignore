@@ -2,4 +2,4 @@
 .git/*
 mongo_db/*
 *.pyc
-*.data-000000-of-00001
+*.ckpt.data-00000-of-00001
