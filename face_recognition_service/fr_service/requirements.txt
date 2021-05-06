@@ -1,0 +1,5 @@
+redis==3.5.3
+numpy==1.18.5
+opencv-python==3.4.2.17
+tensorflow==1.11.0
+kafka-python
