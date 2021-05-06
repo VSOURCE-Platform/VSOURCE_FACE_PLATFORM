@@ -3,4 +3,4 @@
 mongo_db/*
 *.pyc
 
-Face_vox_iter*
+*.data-000000-of-00001

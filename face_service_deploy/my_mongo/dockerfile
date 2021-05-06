@@ -1,0 +1,12 @@
+FROM mongo:4.4
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# 设置工作目录
+ENV WORKDIR /usr/local/work
+ENV AUTO_RUN_DIR /docker-entrypoint-initdb.d
+ENV INSTALL_MONGO_SHELL setup.sh
+RUN mkdir -p $WORKDIR
+# 复制数据库的初始化命令
+COPY ./$INSTALL_MONGO_SHELL $AUTO_RUN_DIR/
+RUN chmod +x $AUTO_RUN_DIR/$INSTALL_MONGO_SHELL
