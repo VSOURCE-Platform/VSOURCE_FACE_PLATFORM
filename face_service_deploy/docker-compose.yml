@@ -33,29 +33,30 @@ services:
       MONGO_INITDB_ROOT_USERNAME: my_root
       MONGO_INITDB_ROOT_PASSWORD: my_123456
 
-  result_service:
-    build: ./result_service
+  face_collector:
+    build: ./face_collector
+    volumes:
+      - ../face_collector:/work
     links:
       - my_redis
       - my_mongo
 
-  fr_service:
-    build: ./fr_service
+  face_calculator:
+    build: ./face_calculator
     volumes:
-      - ./fr_service:/work
+      - ../face_calculator:/work
     depends_on:
       - my_kafka
       - my_redis
 
-  my_web:
-    build: ./my_web
+  face_web:
+    build: ./face_web
     ports:
       - "12349:12349"
     volumes:
-      - ./my_web:/home
+      - ../face_web:/work
     expose:
       - "12349"
     links:
-      - my_redis
       - my_mongo
       - my_kafka

@@ -7,8 +7,9 @@ from flask import request
 from app import app, db
 
 import uuid
+import copy
 import json
-import redis
+import time
 import kafka
 import traceback
 
@@ -26,10 +27,17 @@ def user_call_face_service():
         info = {
             'id': str(uuid.uuid1()),
             'face1': face1,
-            'face2': face2
+            'face2': face2,
+            'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         }
-        info_str = json.dumps(info)
 
+        # 写入数据库
+        auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
+        request_record = copy.deepcopy(info)
+        request_record['status'] = 'unfinished'
+        insert_result = db[configs.app_database_request_table].insert_one(request_record)
+
+        info_str = json.dumps(info)
         producer = kafka.KafkaProducer(bootstrap_servers=[configs.app_kafka_host])
         future = producer.send(configs.app_kafka_topic, key=bytes(configs.app_kafka_key, encoding='utf-8'), value=bytes(info_str, encoding='utf-8'))
         producer.close()

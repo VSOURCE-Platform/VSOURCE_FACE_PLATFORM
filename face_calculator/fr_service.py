@@ -15,19 +15,21 @@ class Service:
         self.redis_port = configs.app_redis_port
         self.INFO_KEY = configs.app_info_key
         self.RESPONSE_KEY = configs.app_response_key
+        self.group_id = configs.app_group_id
 
     def start(self):
-        print('FR SERVICE RUNNING...')
-        print('GET FS OBJECT...')
+        print('[Calculator Init] FR SERVICE RUNNING...')
+        print('[Calculator Init] GET FS OBJECT...')
         fs = get_fs_object()
-        print('GET FS OBJECT OK!')
+        r = redis.Redis(host=self.redis_host, port=self.redis_port)
+        print('[Calculator Init] GET FS OBJECT OK!')
         while True:
             try:
-                consumer = kafka.KafkaConsumer(configs.app_kafka_topic, bootstrap_servers=[configs.app_kafka_host])
+                consumer = kafka.KafkaConsumer(configs.app_kafka_topic,
+                                               group_id=self.group_id
+                                               ,bootstrap_servers=[configs.app_kafka_host])
                 for msg in consumer:
                     info_str = msg.value
-                    r = redis.Redis(host=self.redis_host, port=self.redis_port)
-
                     if not info_str or info_str is None:
                         time.sleep(configs.call_interval)
                         continue

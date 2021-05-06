@@ -11,6 +11,7 @@ app_response_key = 'RESPONSE_KEY'
 app_kafka_host = 'my_kafka:9092'
 app_kafka_topic = 'user_queue'
 app_kafka_key = 'user_requests'
+app_group_id  = 'calculator'
 
 
 

@@ -18,6 +18,7 @@ class Service:
         self.mongo_user  = configs.app_database_user
         self.mongo_pwd   = configs.app_database_pwd
         self.mongo_table = configs.app_database_table_name
+        self.request_table = configs.app_database_request_table
 
     def start(self):
         print('Running...')
@@ -41,8 +42,10 @@ class Service:
                 table = db[self.mongo_table]
                 table.insert_one(response)
 
-                # response_str = json.dumps(response)
-                # assert r.set(response['id'], response_str)
+                request_table = db[self.request_table]
+                request_info = request_table.find_one({'id': response['id']})
+                request_info['status'] = 'finished'
+                request_table.save(request_info)
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)
