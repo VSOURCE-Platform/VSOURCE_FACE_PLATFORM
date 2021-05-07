@@ -9,7 +9,7 @@ import pymongo
 import requests
 import traceback
 
-def test_v_1_0_4():
+def test_v_1_0_5():
     try:
         face_service_params = {
             'face1': './work/face_recognition_native_api/tmp/0006_01.jpg',
@@ -25,6 +25,7 @@ def test_v_1_0_4():
         face_result_params = {
             'id': service_reponse['id']
         }
+        
         face_result_url = 'http://127.0.0.1:12349/get_result'
         response = requests.get(face_result_url, params=face_result_params)
         result_response = json.loads(response.text)
@@ -65,4 +66,4 @@ def test_v_1_0_4():
         return {'status': 400}
 
 if __name__ == '__main__':
-    test_result = test_v_1_0_4()
+    test_result = test_v_1_0_5()
