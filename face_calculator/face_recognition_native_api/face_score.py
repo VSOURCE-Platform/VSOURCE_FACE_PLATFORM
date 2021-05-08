@@ -104,6 +104,14 @@ class FaceScore:
     def cal_face_emb(self, face_path):
         return self.__sess.run(self.emb, feed_dict={self.input: [load_img(face_path)]})[0]
 
+    def cal_face_images(self, face_image1, face_image2):
+
+        img1 = cv2.imdecode(np.asarray(bytearray(face_image1.read()), dtype="uint8"), cv2.IMREAD_COLOR)
+        img2 = cv2.imdecode(np.asarray(bytearray(face_image2.read()), dtype="uint8"), cv2.IMREAD_COLOR)
+        emb1 = self.cal_face_emb_from_mat(img1)
+        emb2 = self.cal_face_emb_from_mat(img2)
+        return self.cal_score_from_emb(emb1, emb2)
+
     def cal_face_emb_from_mat(self, face_mat):
         img = cv2.cvtColor(face_mat, cv2.COLOR_RGB2BGR)
         img = cv2.resize(img, (112, 112))

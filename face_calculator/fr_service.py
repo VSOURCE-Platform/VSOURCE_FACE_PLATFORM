@@ -1,13 +1,16 @@
+import os
 import time
 import json
 import redis
 import kafka
+import requests
 import traceback
+from urllib import request
 
 
 import configs
 
-from face_recognition_native_api.face_api import get_fs_object, face_recognition
+from face_recognition_native_api.face_api import get_fs_object, face_recognition, face_recognition_with_image
 
 class Service:
     def __init__(self):
@@ -37,7 +40,13 @@ class Service:
                     info_str = str(info_str, encoding = "utf-8")
                     print(info_str)
                     info = json.loads(info_str)
-                    score = face_recognition(fs, info['face1'], info['face2'])
+                    face1 = info['face_name1']
+                    face2 = info['face_name2']
+                    face_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
+                    real_face1 = request.urlopen('http://' + face_file_inerface + face1)
+                    real_face2 = request.urlopen('http://' + face_file_inerface + face2)
+                    score = face_recognition_with_image(fs, real_face1, real_face2)
+
                     ans = {'id': info['id'], 'score': str(score)}
                     ans_str = json.dumps(ans)
                     assert r.rpush(self.RESPONSE_KEY, ans_str)

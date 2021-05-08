@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <button id="newButton" class="layui-btn layui-btn-sm">新建</button>
+</div>
+</body>
+
+<script src="/static/layui/layui.js"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script>
+layui.use('layer', function(){
+    var layer = layui.layer;
+    $('#newButton').on('click', function(){
+      layer.open({
+          type:2,
+          title: "提交请求页面",
+          shadeClose: true,
+          shade: 0.8,
+          content: '/submit_page',
+          area: ['800px', '600px']
+      });
+    });
+});
+</script>
+</html>

@@ -9,12 +9,19 @@ services:
     build: ./my_zookeeper
     ports:
       - "2181:2181"
-
+    logging:
+      driver: "none"
+#    volumes:
+#      - "../face_logs/zookeeper_logs:/opt/zookeeper-3.4.13/data"
   my_kafka:
     build: ./my_kafka
     ports:
       - "9092:9092"
+#    volumes:
+#      - "../face_logs/kafka_logs:/kafka"
     restart: always
+    logging:
+      driver: "none"
     links:
       - my_zookeeper
     environment:
@@ -27,6 +34,10 @@ services:
     build: ./my_mongo
     volumes:
       - "../mongo_db:/data/db"
+#      - "../face_logs/mongodb_logs:/logs"
+#    command: ['--logpath', '/logs/mongodb.log']
+    logging:
+      driver: "none"
     ports:
       - "27017:27017"
     environment:
@@ -48,6 +59,8 @@ services:
     depends_on:
       - my_kafka
       - my_redis
+    links:
+      - face_web
 
   face_web:
     build: ./face_web
