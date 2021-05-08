@@ -23,6 +23,7 @@ services:
 #      KAFKA_ADVERTISED_PORT: 9092
 #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://0.0.0.0:9092
 #      KAFKA_LISTENERS: PLAINTEXT://:9092
+
   my_mongo:
     build: ./my_mongo
     volumes:

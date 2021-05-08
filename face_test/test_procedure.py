@@ -11,21 +11,23 @@ import traceback
 
 def test_v_1_0_5():
     try:
+        # input params 
         face_service_params = {
             'face1': './work/face_recognition_native_api/tmp/0006_01.jpg',
             'face2': './work/face_recognition_native_api/tmp/0007_01.jpg'
         }
+        # send get face_service request
         face_service_url = 'http://127.0.0.1:12349/face_service'
         response = requests.get(face_service_url, params=face_service_params)
         service_reponse = json.loads(response.text)
-        assert service_reponse['status'] == 200
+        assert service_reponse['status'] == 200 
 
         time.sleep(5)
-
+        # get id from response
         face_result_params = {
             'id': service_reponse['id']
         }
-        
+        # send get_result request
         face_result_url = 'http://127.0.0.1:12349/get_result'
         response = requests.get(face_result_url, params=face_result_params)
         result_response = json.loads(response.text)
