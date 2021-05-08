@@ -13,6 +13,7 @@ app_kafka_topic = 'user_queue'
 app_kafka_key = 'user_requests'
 app_group_id  = 'calculator'
 
-
+app_web_host = 'face_web:12349'
+app_file_interface = '/get_image_file'
 
 call_interval = 1

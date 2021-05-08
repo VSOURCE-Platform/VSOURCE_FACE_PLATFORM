@@ -3,7 +3,7 @@
 # @File     : vie.py
 # @Function : TODO
 
-from flask import request
+from flask import request, render_template
 from app import app, db
 
 import uuid
@@ -15,6 +15,9 @@ import traceback
 
 import configs
 
+@app.route('/', methods=['GET'])
+def main_page():
+    return render_template('main.html')
 
 
 @app.route('/face_service', methods=['GET'])

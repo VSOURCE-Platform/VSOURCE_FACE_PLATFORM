@@ -3,3 +3,6 @@
 mongo_db/*
 *.pyc
 *.ckpt.data-00000-of-00001
+face_logs/kafka_logs/*
+face_logs/mongodb_logs/*
+face_logs/zookeeper_logs/*

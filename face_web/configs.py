@@ -35,3 +35,5 @@ app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
     app_database_port,
     app_database_name
 )
+
+uploader_folder = './uploaded_images'
