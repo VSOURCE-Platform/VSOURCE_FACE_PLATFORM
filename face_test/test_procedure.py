@@ -70,14 +70,14 @@ def test_v_1_1_0():
         test_dir_path = os.path.dirname(__file__)
         face1 = os.path.join(test_dir_path, 'images', '1.jpg')
         face2 = os.path.join(test_dir_path, 'images', '2.jpg')
-        face3 = os.path.join(test_dir_path, 'images', '3.jpg')
-        face4 = os.path.join(test_dir_path, 'images', '4.jpg')
+        face3 = os.path.join(test_dir_path, 'images', '5.jpg')
+        face4 = os.path.join(test_dir_path, 'images', '6.jpg')
 
         upload_url = 'http://0.0.0.0:12349/face_upload'
         face_file1 = {'file': ('1.jpg', open(face1, 'rb'), 'image/jgeg')}
         face_file2 = {'file': ('2.jpg', open(face2, 'rb'), 'image/jgeg')}
-        face_file3 = {'file': ('3.jpg', open(face3, 'rb'), 'image/jgeg')}
-        face_file4 = {'file': ('4.jpg', open(face4, 'rb'), 'image/jgeg')}
+        face_file3 = {'file': ('5.jpg', open(face3, 'rb'), 'image/jgeg')}
+        face_file4 = {'file': ('6.jpg', open(face4, 'rb'), 'image/jgeg')}
 
         response1 = json.loads(requests.post(upload_url, files=face_file1).text)
         response2 = json.loads(requests.post(upload_url, files=face_file2).text)
@@ -89,7 +89,7 @@ def test_v_1_1_0():
         save_path3 = response3['return_path']
         save_path4 = response4['return_path']
 
-        form_request_url = 'http://0.0.0.0:12349//face_submit'
+        form_request_url = 'http://0.0.0.0:12349/face_submit'
         response1 = requests.post(form_request_url, data={'face_name1': save_path1, 'face_name2': save_path2})
         response2 = requests.post(form_request_url, data={'face_name1': save_path3, 'face_name2': save_path4})
 
@@ -98,7 +98,7 @@ def test_v_1_1_0():
         assert service_reponse1['status'] == 200
         assert service_reponse2['status'] == 200
 
-        time.sleep(7)
+        time.sleep(3)
 
         face_result_url = 'http://0.0.0.0:12349/get_result'
 

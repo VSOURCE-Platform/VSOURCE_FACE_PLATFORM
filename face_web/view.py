@@ -77,7 +77,7 @@ def get_result():
             result.pop('_id')
             ans['result'] = result
             r.set(uu_id, ans)
-            r.expire(uu_id, 10)
+            r.expire(uu_id, configs.app_redis_expire_time)
             print('Write into redis')
     except Exception as e:
         ans['status'] = 500
