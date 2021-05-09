@@ -6,3 +6,4 @@ mongo_db/*
 face_logs/kafka_logs/*
 face_logs/mongodb_logs/*
 face_logs/zookeeper_logs/*
+face_storage/uploaded_images/*
