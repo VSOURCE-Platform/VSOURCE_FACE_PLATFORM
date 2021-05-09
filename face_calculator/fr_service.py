@@ -43,8 +43,8 @@ class Service:
                     face1 = info['face_name1']
                     face2 = info['face_name2']
                     face_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
-                    real_face1 = request.urlopen('http://' + face_file_inerface + face1)
-                    real_face2 = request.urlopen('http://' + face_file_inerface + face2)
+                    real_face1 = request.urlopen(face_file_inerface + face1)
+                    real_face2 = request.urlopen(face_file_inerface + face2)
                     score = face_recognition_with_image(fs, real_face1, real_face2)
 
                     ans = {'id': info['id'], 'score': str(score)}

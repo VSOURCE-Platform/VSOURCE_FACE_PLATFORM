@@ -5,9 +5,6 @@
 
 import view
 from app import app
-from upload import upload_api
-
-app.register_blueprint(upload_api)
 
 if __name__ == '__main__':
-    app.run(port=12349)
+    app.run(host='0.0.0.0', port=12349)

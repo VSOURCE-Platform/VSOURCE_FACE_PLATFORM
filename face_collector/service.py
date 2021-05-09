@@ -44,8 +44,19 @@ class Service:
 
                 request_table = db[self.request_table]
                 request_info = request_table.find_one({'id': response['id']})
-                request_info['status'] = 'finished'
-                request_table.save(request_info)
+                if request_info:
+                    request_info['status'] = 'finished'
+                    request_table.save(request_info)
+                else:
+                    time.sleep(configs.max_interval)
+                    request_table = db[self.request_table]
+                    request_info = request_table.find_one({'id': response['id']})
+                    if not request_info:
+                        request_table.insert({'id': response['id'], 'status': 'lost'})
+                    else:
+                        request_info['status'] = 'finished'
+                        request_table.save(request_info)
+
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)

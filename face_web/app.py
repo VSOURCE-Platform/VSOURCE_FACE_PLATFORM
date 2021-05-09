@@ -12,7 +12,6 @@ import configs
 def create_app():
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
     app.secret_key           = configs.app_secret_key
-    app.config['UPLOAD_FOLDER']     = configs.uploader_folder
 
     client = pymongo.MongoClient(host=configs.app_database_host, port=configs.app_database_port)
     db = client[configs.app_database_name]
