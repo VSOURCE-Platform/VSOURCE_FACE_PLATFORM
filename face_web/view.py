@@ -40,6 +40,7 @@ def face_submit():
             'id': str(uuid.uuid1()),
             'face_name1': face_name1,
             'face_name2': face_name2,
+            'status': 'unfinished',
             'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         }
         info_str = json.dumps(info)
@@ -112,3 +113,42 @@ def face_file(timestamp, filename):
     except Exception as e:
         traceback.print_exc()
         return flask.jsonify({'status': 500, 'err_msg': str(e)})
+
+
+@app.route('/web/face_data')
+def get_face_data_interface():
+    head = {"code": 0, "msg": "", "count": 10000, "data": []}
+    limit = int(request.values.get('limit'))
+    page = int(request.values.get('page'))
+    print(limit, page)
+    if not limit:
+        limit = 10
+    if not page:
+        page = 1
+    auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
+    results = db[configs.app_database_table].find()
+    ans_data = []
+    for each_result in results:
+        _message = {}
+        _message['id'] = each_result['id']
+        _message['status'] = each_result['status']
+        _message['createDate'] = each_result['create_date']
+        _message['collectedDate'] = each_result['collected_date']
+        _message['face_name1'] = each_result['face_name1']
+        _message['face_name2'] = each_result['face_name2']
+        _message['score'] = each_result['score']
+        _message['owner'] = 'debug'
+        ans_data.append(_message)
+
+    final_data = []
+    start_ind = (page - 1) * limit
+    end_ind = page * limit
+    if start_ind >= len(ans_data):
+        final_data = []
+    else:
+        sorted_data = sorted(ans_data, key=lambda x: x['createDate'], reverse=True)
+        final_data = sorted_data[start_ind : end_ind]
+
+    head["data"] = final_data
+    head["count"] = len(ans_data)
+    return flask.jsonify(head)
