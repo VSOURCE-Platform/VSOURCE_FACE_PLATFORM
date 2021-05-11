@@ -34,7 +34,7 @@ class Service:
                 print(response_str)
                 response = json.loads(response_str)
                 now_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                response['collected_time'] = now_time
+                response['collected_date'] = now_time
 
                 client = pymongo.MongoClient(host=self.mongo_host, port=self.mongo_port)
                 db = client[self.mongo_db]
