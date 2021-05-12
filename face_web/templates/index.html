@@ -16,15 +16,26 @@
             top: 50%;
             margin:-150px 0 0 -150px;
             z-index:99;}
+        .item{
+            width:100%;
+        }
+        body{
+            background: url("/static/bg.jpg") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
     </style>
 </head>
 <body>
 <div class="ind">
     <h1>Hi, there</h1>
-    <button class="layui-btn login_btn" id="face_btn">人脸识别服务</button>
-    <button class="layui-btn login_btn" id="other1_btn">其他服务</button>
-    <button class="layui-btn login_btn" id="other2_btn">其他服务</button>
-    <button class="layui-btn login_btn" id="other3_btn">其他服务</button>
+    <div><button class="layui-btn layui-btn-primary layui-border-green item" id="face_btn">人脸识别服务</button></div>
+    <br>
+    <div><button class="layui-btn layui-btn-primary layui-border-green item" id="other1_btn">其他服务</button></div>
+    <br>
+    <div><button class="layui-btn layui-btn-primary layui-border-green item" id="other2_btn">其他服务</button></div>
+    <br>
+    <div><button class="layui-btn layui-btn-primary layui-border-green item" id="other3_btn">其他服务</button></div>
 </div>
 </body>
 

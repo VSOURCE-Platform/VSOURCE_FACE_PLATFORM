@@ -19,7 +19,7 @@ import traceback
 import configs
 
 @app.route('/', methods=['GET'])
-def main_page():
+def index_page():
     return render_template('index.html')
 
 @app.route('/face', methods=['GET'])

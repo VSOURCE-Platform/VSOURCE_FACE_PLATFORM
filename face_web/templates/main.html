@@ -6,23 +6,15 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css">
 </head>
 <body>
-<div class="layui-header">
-    <div class="layui-logo">Face Service</div>
-    <!-- 头部区域（可配合layui已有的水平导航） -->
-    <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item"><a href="/">首页</a></li>
-      <li class="layui-nav-item layui-this">人脸服务</li>
-      <li class="layui-nav-item">其他服务</li>
-    </ul>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item">
-        <a href="javascript:;" id="now_user"></a>
-      </li>
-      <li class="layui-nav-item"><a href="/logout">退出</a></li>
-    </ul>
+<div>
+<ul class="layui-nav layui-bg-cyan">
+  <li class="layui-nav-item"><a href="/">首页</a></li>
+  <li class="layui-nav-item layui-this"><a href="/face">人脸服务</a></li>
+  <li class="layui-nav-item"><a href="">其他服务</a></li>
+</ul>
+<br>
 </div>
-
-<div class="layui-body">
+<div>
 <script type="text/html" id="faceToolbarDemo">
   <div class="layui-btn-container">
     <!-- <button class="layui-btn layui-btn-sm" lay-event="makeNew">新建</button> -->

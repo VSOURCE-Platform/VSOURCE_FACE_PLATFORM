@@ -20,7 +20,9 @@ class Service:
         self.request_table = configs.app_database_request_table
 
     def start(self):
-        print('Running...')
+        print('[RequestDB Init] Sleeping...')
+        time.sleep(configs.sleep_interval)
+        print('[RequestDB Init] Init Successfully!')
         while True:
             try:
                 consumer = kafka.KafkaConsumer(self.kafka_topic,
