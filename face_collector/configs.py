@@ -20,3 +20,4 @@ app_database_request_table = 'face_requests'
 
 call_interval = 0.1
 max_interval = 3
+sleep_interval = 10

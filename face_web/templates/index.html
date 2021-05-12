@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <style>
+        .ind{
+            height:260px;
+            width: 260px;
+            padding: 20px;
+            background-color:rgba(0,0,0,0.5);
+            border-radius: 4px;
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            margin:-150px 0 0 -150px;
+            z-index:99;}
+    </style>
+</head>
+<body>
+<div class="ind">
+    <h1>Hi, there</h1>
+    <button class="layui-btn login_btn" id="face_btn">人脸识别服务</button>
+    <button class="layui-btn login_btn" id="other1_btn">其他服务</button>
+    <button class="layui-btn login_btn" id="other2_btn">其他服务</button>
+    <button class="layui-btn login_btn" id="other3_btn">其他服务</button>
+</div>
+</body>
+
+<script src="/static/layui/layui.js"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script>
+layui.use(['layer'], function(){
+    var $ = layui.jquery, layer = layui.layer;
+
+    $("#face_btn").click(function () {
+        console.log('enter face');
+    });
+
+    $("#other1_btn").click(function () {
+        console.log('enter other1');
+    });
+
+    $("#other2_btn").click(function () {
+        console.log('enter other2');
+    });
+
+    $("#other3_btn").click(function () {
+        console.log('enter other3');
+    });
+});
+</script>
+</html>
