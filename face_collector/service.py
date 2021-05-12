@@ -21,7 +21,9 @@ class Service:
         self.request_table = configs.app_database_request_table
 
     def start(self):
-        print('Running...')
+        print('[Collector Init] Sleeping...')
+        time.sleep(configs.sleep_interval)
+        print('[Collector Init] Init Successfully!')
         while True:
             try:
                 r = redis.Redis(host=self.redis_host, port=self.redis_port)

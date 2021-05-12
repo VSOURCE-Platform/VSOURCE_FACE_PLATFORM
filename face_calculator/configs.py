@@ -16,4 +16,5 @@ app_group_id  = 'calculator'
 app_web_host = 'http://face_storage:12350'
 app_file_interface = '/get_image_file'
 
-call_interval = 1
+call_interval  = 1
+sleep_interval = 7

@@ -27,6 +27,8 @@ class Service:
         fs = get_fs_object()
         r = redis.Redis(host=self.redis_host, port=self.redis_port)
         print('[Calculator Init] GET FS OBJECT OK!')
+        time.sleep(configs.sleep_interval)
+        print('[Calculator Init] Init Successfully!')
         while True:
             try:
                 consumer = kafka.KafkaConsumer(configs.app_kafka_topic,
