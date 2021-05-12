@@ -20,8 +20,11 @@ import configs
 
 @app.route('/', methods=['GET'])
 def main_page():
-    return render_template('main.html')
+    return render_template('index.html')
 
+@app.route('/face', methods=['GET'])
+def main_page():
+    return render_template('main.html')
 
 @app.route('/submit_page')
 def submit_page():
