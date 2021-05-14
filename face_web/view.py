@@ -18,15 +18,36 @@ import traceback
 
 import configs
 
+from functools import wraps
+
+
+from flask_cors import CORS, cross_origin
+
+def check_key(f):
+    @wraps(f)
+    def check(**kwargs):
+        try:
+            access_key = request.args.get('access_key')
+            if access_key != configs.accesskey:
+                flask.abort(403)
+            return f(**kwargs)
+        except Exception as e:
+            flask.abort(403)
+    return check
+
+
 @app.route('/', methods=['GET'])
+# @check_key
 def index_page():
     return render_template('index.html')
 
 @app.route('/face', methods=['GET'])
+# @check_key
 def main_page():
     return render_template('main.html')
 
 @app.route('/submit_page')
+# @check_key
 def submit_page():
     return render_template('submit_page.html')
 
@@ -65,6 +86,7 @@ def face_submit():
 
 
 @app.route('/get_result', methods=['GET'])
+# @check_key
 def get_result():
     ans = {'status': 200, 'err_msg': ''}
     try:
@@ -106,6 +128,7 @@ def face_upload():
     return response.text
 
 @app.route('/get_image_file/<timestamp>/<filename>')
+# @check_key
 def face_file(timestamp, filename):
     try:
         face_get_file_url = configs.app_storage_host + configs.app_storage_getfile_interface + '/' + timestamp + '/' + filename
@@ -119,6 +142,8 @@ def face_file(timestamp, filename):
 
 
 @app.route('/web/face_data')
+@cross_origin()
+# @check_key
 def get_face_data_interface():
     head = {"code": 0, "msg": "", "count": 10000, "data": []}
     limit = int(request.values.get('limit'))

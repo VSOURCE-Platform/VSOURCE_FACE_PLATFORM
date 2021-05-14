@@ -9,6 +9,8 @@ import pymongo
 import configs
 
 
+from flask_cors import CORS, cross_origin
+
 def create_app():
     app = Flask(__name__, template_folder='./templates', static_folder='./static')
     app.secret_key           = configs.app_secret_key
@@ -18,3 +20,4 @@ def create_app():
     return app, db
 
 app, db = create_app()
+cors = CORS(app)
