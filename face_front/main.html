@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<div>
+<ul class="layui-nav layui-bg-cyan">
+  <li class="layui-nav-item"><a href="/">首页</a></li>
+  <li class="layui-nav-item layui-this"><a href="/face">人脸服务</a></li>
+  <li class="layui-nav-item"><a href="">其他服务</a></li>
+</ul>
+<br>
+</div>
+<div>
+<script type="text/html" id="faceToolbarDemo">
+  <div class="layui-btn-container">
+    <!-- <button class="layui-btn layui-btn-sm" lay-event="makeNew">新建</button> -->
+    <a id="newButton"  class="layui-btn"> 新建 </a>
+    <a id="refreshButton"  class="layui-btn"> 刷新 </a>
+  </div>
+</script>
+  <table id="faceMainTable" lay-filter="tableFilter"></table>
+</div>
+</body>
+
+<script src="/static/layui/layui.js"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script>
+layui.use('table', function(){
+    var table = layui.table;
+    table.render({
+      elem: '#faceMainTable'
+      ,height: 'full-10'
+      ,toolbar: '#faceToolbarDemo'
+      ,url: 'http://localhost:12349/web/face_data' //数据接口
+      ,page: true //开启分页
+      ,initSort: {field: 'createDate', type:'desc'}
+      ,cols: [[ //表头
+        {field: 'id', title: 'id', width:100, sort: true},
+        {field: 'status', title: '状态', width:100},
+        {field: 'createDate', title: '提交日期', align: 'center', width:120},
+        {field: 'collectedDate', title: '收集日期', align: 'center', width:120},
+        {field: 'face_name1', title: 'face_name1', align: 'center', width:120},
+        {field: 'face_name2', title: 'face_name2', align: 'center', width:120},
+        {field: 'score', title: 'score', align: 'center', width:100},
+        {field: 'owner', title: 'owner', align: 'center', width:100},
+      ]]
+    });
+
+    $('#newButton').on('click', function(){
+      layer.open({
+          type:2,
+          title: "提交请求页面",
+          shadeClose: true,
+          shade: 0.8,
+          content: '/submit_page.html',
+          area: ['800px', '600px']
+      });
+    });
+
+    $('#refreshButton').on('click', function(){
+        window.location.reload();
+    });
+});
+</script>
+</html>

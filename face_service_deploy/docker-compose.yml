@@ -4,6 +4,9 @@ services:
     build: ./my_redis
     ports:
       - "6379:6379"
+    networks:
+      - face_services
+
 
   my_zookeeper:
     build: ./my_zookeeper
@@ -11,6 +14,8 @@ services:
       - "2181:2181"
     logging:
       driver: "none"
+    networks:
+      - face_services
 
   my_kafka:
     build: ./my_kafka
@@ -21,8 +26,8 @@ services:
       driver: "none"
     depends_on:
       - my_zookeeper
-    links:
-      - my_zookeeper
+    networks:
+      - face_services
     environment:
       KAFKA_ZOOKEEPER_CONNECT: my_zookeeper:2181
       KAFKA_ADVERTISED_HOST_NAME: my_kafka
@@ -39,6 +44,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: my_root
       MONGO_INITDB_ROOT_PASSWORD: my_123456
+    networks:
+      - face_services
 
   face_calculator:
     build: ./face_calculator
@@ -48,9 +55,8 @@ services:
       - my_kafka
       - my_redis
       - my_zookeeper
-    links:
-      - face_web
-      - face_storage
+    networks:
+      - face_services
 
   face_web:
     build: ./face_web
@@ -60,10 +66,21 @@ services:
       - ../face_web:/work
     expose:
       - "12349"
-    links:
-      - my_mongo
-      - my_kafka
-      - face_storage
+    networks:
+      - face_services
+
+  face_front:
+    build: ./face_front
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../face_front:/work
+    expose:
+      - "3000"
+    depends_on:
+      - face_web
+    networks:
+      - face_services
 
   face_storage:
     build: ./face_storage
@@ -73,23 +90,26 @@ services:
       - ../face_storage:/work
     expose:
       - "12350"
+    networks:
+      - face_services
 
   face_collector:
     build: ./face_collector
     volumes:
       - ../face_collector:/work
-    links:
-      - my_redis
-      - my_mongo
+    networks:
+      - face_services
 
   face_request_db:
     build: ./face_request_db
     volumes:
       - ../face_request_db:/work
-    links:
-      - my_kafka
-      - my_mongo
+    networks:
+      - face_services
     depends_on:
       - my_kafka
       - my_mongo
       - my_zookeeper
+
+networks:
+  face_services:

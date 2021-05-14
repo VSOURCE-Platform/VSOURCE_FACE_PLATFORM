@@ -17,4 +17,4 @@ app_database_port = 27017
 app_database_request_table = 'face_requests'
 
 call_interval = 0.1
-sleep_interval = 10
+sleep_interval = 15
