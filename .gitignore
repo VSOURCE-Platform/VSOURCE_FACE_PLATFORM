@@ -8,4 +8,4 @@ face_logs/mongodb_logs/*
 face_logs/zookeeper_logs/*
 face_storage/uploaded_images/*
 
-face_front/node_modules/*
+face_front/node_modules

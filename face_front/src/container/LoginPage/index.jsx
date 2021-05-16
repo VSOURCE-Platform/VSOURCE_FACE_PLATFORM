@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import $ from 'jquery';
 import my_logo from '../Index/logo.png';
 
@@ -75,25 +74,34 @@ class SignInButton extends React.Component {
     }
 
     handleClick() {
-        axios({
-            method: "post",
-            url: "/app/login",
-            withCredentials:true,
-            data: {username:$("#email-address").val(),password:$("#password").val()},
-            headers: {"Access-Control-Allow-Origin": "*",'Content-Type': 'application/x-www-form-urlencoded'}
-            }
-        ).then(res=>{
-           console.log(res.data);
-           if (res.data.status == 400){
-                $("#login_status").append("用户名或密码错误");
-//                 _this.setState({isLoaded:false});
-           }else {
-                window.location.reload();
-//                 _this.setState({isLoaded:true});
-           }
-        },
-        error=>{
-          console.log('失败了',error);
+        $.ajax({
+          url: 'http://localhost:12349/login',
+          type:'post',
+          xhrFields: {
+            withCredentials: true,
+          },
+          headers: {
+            "Access-Control-Allow-Origin": "*"
+          },
+          crossDomain: true,
+          dataType:'json',
+          data:{
+              username:$("#email-address").val(),
+              password:$("#password").val()
+          },
+          success:function (data) {
+              if(data.status == 200){
+                  window.location.href = '/';
+                  console.log('login success!');
+              }else{
+                  console.log('login fail!');
+                  $("#login_status").text("Invalid username or password!");
+              }
+              console.log(data)
+          },
+          error:function (error) {
+            $("#login_status").text("Login Error!");
+          }
         });
     }
 
@@ -132,35 +140,4 @@ class LoginPage extends React.Component {
     }
 }
 
-class Face extends React.Component {
-    constructor(props){
-        super(props);
-        this.state={
-            isLoaded:false
-        }
-    }
-    componentDidMount(){
-        const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
-        axios.get('http://localhost:12349/is_login').then(res=>{
-           console.log(res.data);
-           if (res.data.status == 400){
-                _this.setState({isLoaded:false});
-           }else {
-                _this.setState({isLoaded:true});
-           }
-        },
-        error=>{
-          console.log('失败了',error);
-        });
-    }
-
-    render() {
-        if (this.state.isLoaded){
-            return <div> Face Page </div>
-        }else{
-            return <LoginPage />
-        }
-    }
-}
-
-export default Face;
+export default LoginPage;

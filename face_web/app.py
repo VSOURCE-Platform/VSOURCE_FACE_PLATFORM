@@ -22,5 +22,5 @@ def create_app():
     return app, db
 
 app, db = create_app()
-cors = CORS(app)
+CORS(app, supports_credentials=True, resources=r'/*')
 login_manager = LoginManager(app)

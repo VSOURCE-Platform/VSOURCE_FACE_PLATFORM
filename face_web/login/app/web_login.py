@@ -7,7 +7,7 @@ import flask
 import flask_login
 
 from flask import request, Blueprint
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 
 from app import app
 from login import user_instance
@@ -15,31 +15,28 @@ from login.db import db_login
 
 login_print = Blueprint('login', __name__, template_folder='../templates', static_folder='../static', static_url_path='/login')
 
-@login_print.route('/login', methods=['POST'])
-@cross_origin()
+@login_print.route('/login', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True)
 def login():
-    res = flask.make_response(flask.jsonify({'status': 400, 'message': "OK"}))
-    res.headers['Access-Control-Allow-Origin'] = '*'
-    res.headers['Access-Control-Allow-Method'] = '*'
-    res.headers['Access-Control-Allow-Headers'] = '*'
-    res.headers["Access-Control-Allow-Credentials"] = 'true'
-
-    data = request.get_json(silent=True)
-    username = data['username']
-    password = data['password']
-    print(username, password)
-    if not db_login.verify_login(username=username, password=password):
-        app.logger.error("{} 登录失败".format(username))
-        res['message'] = "Not Valid"
-        return res
-    user_instance.id = username
-    flask_login.login_user(user_instance)
-    app.logger.info("{}({}) 登录成功".format(username, db_login.get_user_permission_from_user_id(username)))
-    res['status'] = 200
-    return res
+    if request.method == "POST":
+        # data = request.get_json(silent=True)
+        # username = data['username']
+        # password = data['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username, password)
+        if not db_login.verify_login(username=username, password=password):
+            app.logger.error("{} 登录失败".format(username))
+            rsp = flask.jsonify({'status': 400, 'message': "Not Valid"})
+            return rsp
+        user_instance.id = username
+        flask_login.login_user(user_instance)
+        app.logger.info("{}({}) 登录成功".format(username, db_login.get_user_permission_from_user_id(username)))
+        rsp = flask.jsonify({'status': 200, 'message': "OK"})
+        return rsp
 
 @login_print.route('/is_login', methods=['GET'])
-@cross_origin()
+@cross_origin(supports_credentials=True)
 def islogin():
     if hasattr(flask_login.current_user, 'id'):
         return flask.jsonify({'status': 200, 'message': "OK"})
@@ -66,8 +63,12 @@ def register():
 
 
 @login_print.route('/logout')
+@cross_origin(supports_credentials=True)
 @flask_login.login_required
 def logout():
-    app.logger.info("{} 登出成功".format(flask_login.current_user.id))
-    flask_login.logout_user()
-    return flask.redirect('/login')
+    try:
+        app.logger.info("{} 登出成功".format(flask_login.current_user.id))
+        flask_login.logout_user()
+        return flask.jsonify({'status': 200, 'message': "OK"})
+    except Exception as e:
+        return flask.jsonify({'status': 400, 'message': "ERROR"})

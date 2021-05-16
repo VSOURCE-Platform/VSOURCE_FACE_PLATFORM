@@ -12,7 +12,7 @@ server: {
       '/app': {
         target: 'http://localhost:12349',
         changeOrigin: true,
-//        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path) => path.replace(/^\/app/, '')
       }
     },
     plugins: [reactRefresh()]
