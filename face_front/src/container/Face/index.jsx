@@ -4,6 +4,8 @@ import my_logo from '../Index/logo.png';
 import LoginPage from '../LoginPage'
 import FacePage from '../FacePage'
 
+import TableDemo from './Components/table'
+
 class Face extends React.Component {
     constructor(props){
         super(props);

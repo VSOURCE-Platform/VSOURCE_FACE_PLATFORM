@@ -3,7 +3,7 @@
 # @File     : vie.py
 # @Function : TODO
 
-from flask import request, render_template, make_response
+from flask import request, make_response
 from app import app, db
 
 import uuid
@@ -18,31 +18,14 @@ import traceback
 
 import configs
 
-from functools import wraps
-
-
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 import flask_login
 
-# @app.route('/', methods=['GET'])
-# def index_page():
-#     return render_template('index.html')
-#
-# @app.route('/face', methods=['GET'])
-# # @check_key
-# def main_page():
-#     return render_template('main.html')
-#
-# @app.route('/submit_page')
-# # @check_key
-# def submit_page():
-#     return render_template('submit_page.html')
+face_service_print = flask.Blueprint('face_service_print', __name__)
 
-@app.route('/face_submit', methods=['GET', 'POST'])
+@face_service_print.route('/face_submit', methods=['POST'])
 @flask_login.login_required
 def face_submit():
-    if flask.request.method == 'GET':
-        return render_template('main.html')
     ans = {'status': 200, 'err_msg': ''}
     try:
         face_name1 = flask.request.form.get('face_name1')
@@ -73,7 +56,7 @@ def face_submit():
     return ans
 
 
-@app.route('/get_result', methods=['GET'])
+@face_service_print.route('/get_result', methods=['GET'])
 @flask_login.login_required
 def get_result():
     ans = {'status': 200, 'err_msg': ''}
@@ -100,8 +83,8 @@ def get_result():
 
 
 
-@app.route('/face_upload', methods=['POST'])
-# @flask_login.login_required
+@face_service_print.route('/face_upload', methods=['POST'])
+@flask_login.login_required
 def face_upload():
     if 'file' not in flask.request.files:
         return flask.jsonify({'status': 500, 'err_msg': '[Face_Web] No file in files'})
@@ -116,7 +99,7 @@ def face_upload():
     print(response.text)
     return response.text
 
-@app.route('/get_image_file/<timestamp>/<filename>')
+@face_service_print.route('/get_image_file/<timestamp>/<filename>')
 @flask_login.login_required
 def face_file(timestamp, filename):
     try:
@@ -130,7 +113,7 @@ def face_file(timestamp, filename):
         return flask.jsonify({'status': 500, 'err_msg': str(e)})
 
 
-@app.route('/web/face_data')
+@face_service_print.route('/web/face_data')
 @cross_origin()
 # @flask_login.login_required
 def get_face_data_interface():
@@ -153,7 +136,9 @@ def get_face_data_interface():
         _message['createDate'] = each_result['create_date']
         _message['collectedDate'] = each_result['collected_date']
         _message['face_name1'] = each_result['face_name1']
+        _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name1'])
         _message['face_name2'] = each_result['face_name2']
+        _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name2'])
         _message['score'] = each_result['score']
         _message['owner'] = 'debug'
         ans_data.append(_message)

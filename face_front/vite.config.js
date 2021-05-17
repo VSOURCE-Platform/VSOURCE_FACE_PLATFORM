@@ -16,5 +16,15 @@ server: {
       }
     },
     plugins: [reactRefresh()]
-  }
+  },
+css: {
+      preprocessorOptions: {
+        less: {
+//          modifyVars: {
+//            hack: `true; @import (reference) "${resolve('src/style/global/config.less')}";`,
+//          },
+          javascriptEnabled: true,
+        }
+      }
+    }
 })

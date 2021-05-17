@@ -6,6 +6,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
 import my_logo from '../Index/logo.png';
+// import FaceTable from '../FaceTable'
 
 const navigation = ['Face Monitor']
 const profile = ['Your Profile', 'Settings', 'Sign out']

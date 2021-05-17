@@ -69,6 +69,7 @@ def logout():
     try:
         app.logger.info("{} 登出成功".format(flask_login.current_user.id))
         flask_login.logout_user()
-        return flask.jsonify({'status': 200, 'message': "OK"})
+        # return flask.jsonify({'status': 200, 'message': "OK"})
+        return flask.redirect('/')
     except Exception as e:
         return flask.jsonify({'status': 400, 'message': "ERROR"})
