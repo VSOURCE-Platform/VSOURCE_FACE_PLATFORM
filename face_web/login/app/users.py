@@ -6,6 +6,14 @@ import flask_login
 class User(flask_login.UserMixin):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
+        self.permission = 'NORMAL'
+
+    def is_visitor(self):
+        try:
+            return db_login.user_is_visitor(self.get_id())
+        except Exception as e:
+            return False
+
     def is_admin(self):
         try:
             user_permission = db_login.get_user_permission_from_user_id(self.get_id())

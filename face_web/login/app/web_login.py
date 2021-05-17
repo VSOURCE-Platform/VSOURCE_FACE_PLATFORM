@@ -3,6 +3,9 @@
 # @File     : web_login.py
 # @Function : TODO
 
+import uuid
+import threading
+
 import flask
 import flask_login
 
@@ -12,6 +15,7 @@ from flask_cors import cross_origin
 from app import app
 from login import user_instance
 from login.db import db_login
+import configs
 
 login_print = Blueprint('login', __name__, template_folder='../templates', static_folder='../static', static_url_path='/login')
 
@@ -19,9 +23,6 @@ login_print = Blueprint('login', __name__, template_folder='../templates', stati
 @cross_origin(supports_credentials=True)
 def login():
     if request.method == "POST":
-        # data = request.get_json(silent=True)
-        # username = data['username']
-        # password = data['password']
         username = request.form.get('username')
         password = request.form.get('password')
         print(username, password)
@@ -29,9 +30,29 @@ def login():
             app.logger.error("{} 登录失败".format(username))
             rsp = flask.jsonify({'status': 400, 'message': "Not Valid"})
             return rsp
+        lock = threading.RLock()
+        lock.acquire()
         user_instance.id = username
+        user_instance.permission = db_login.get_user_permission_from_user_id(username)
         flask_login.login_user(user_instance)
+        lock.release()
         app.logger.info("{}({}) 登录成功".format(username, db_login.get_user_permission_from_user_id(username)))
+        rsp = flask.jsonify({'status': 200, 'message': "OK"})
+        return rsp
+
+@login_print.route('/login_as_visitor', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True)
+def login_as_visitor():
+    if request.method == "POST":
+        tmp_user_id = 'VISITOR_' + str(uuid.uuid1())
+        lock = threading.RLock()
+        lock.acquire()
+        user_instance.id = tmp_user_id
+        user_instance.permission = 'VISITOR'
+        flask_login.login_user(user_instance, duration=configs.visitor_expire_time)
+        db_login.add_visitor_user(tmp_user_id)
+        lock.release()
+        app.logger.info("{}({}) 登录成功".format(tmp_user_id, 'as a visitor.'))
         rsp = flask.jsonify({'status': 200, 'message': "OK"})
         return rsp
 
@@ -73,3 +94,10 @@ def logout():
         return flask.redirect('/')
     except Exception as e:
         return flask.jsonify({'status': 400, 'message': "ERROR"})
+
+@login_print.route('/now_user', methods=['GET'])
+@flask_login.login_required
+def now_user():
+    if flask_login.current_user.is_visitor():
+        return flask.jsonify({'status': 200, 'username': str(flask_login.current_user.id)[:15]})
+    return flask.jsonify({'status': 200, 'username': flask_login.current_user.id})

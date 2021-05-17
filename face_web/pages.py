@@ -6,6 +6,8 @@
 import flask
 import flask_login
 
+from login import login_required_and_redirect
+
 page_print = flask.Blueprint('page', __name__, template_folder='./templates', static_folder='./static')
 
 @page_print.route('/', methods=['GET'])
@@ -17,15 +19,13 @@ def login_page():
     return flask.render_template('login.html')
 
 #
-@page_print.route('/face', methods=['GET'])
-def main_page():
-    return flask.render_template('main.html')
+# @page_print.route('/face', methods=['GET'])
+# def main_page():
+#     return flask.render_template('main.html')
 
 @page_print.route('/face_dashboard', methods=['GET'])
-# @flask_login.login_required
+@login_required_and_redirect
 def face_dashboard_page():
-    if not flask_login.current_user.is_authenticated:
-        return flask.redirect('/login_page')
     return flask.render_template('face_dashboard.html')
 
 @page_print.route('/submit_page')

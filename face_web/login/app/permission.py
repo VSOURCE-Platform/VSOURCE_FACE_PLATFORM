@@ -4,6 +4,7 @@ class Permission:
     NORMAL = 'NORMAL'
     ADMINISTER = 'ADMINISTER'
     MEMBER     = 'MEMBER'
+    VISITOR    = 'VISITOR'
 
     @staticmethod
     def load_permission(permission_str):
@@ -13,6 +14,7 @@ class Permission:
             return Permission.ADMINISTER
         if permission_str == Permission.MEMBER:
             return Permission.MEMBER
+        if permission_str == Permission.VISITOR:
+            return Permission.VISITOR
         app.logger.error("未识别的权限：{}".format(permission_str))
-        # raise RuntimeError("未识别的权限：{}".format(permission_str))
         return Permission.NORMAL

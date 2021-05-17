@@ -20,11 +20,12 @@ import configs
 
 from flask_cors import cross_origin
 import flask_login
+from login import upper_visitor
 
 face_service_print = flask.Blueprint('face_service_print', __name__)
 
 @face_service_print.route('/face_submit', methods=['POST'])
-@flask_login.login_required
+@upper_visitor
 def face_submit():
     ans = {'status': 200, 'err_msg': ''}
     try:
@@ -36,6 +37,7 @@ def face_submit():
             'face_name1': face_name1,
             'face_name2': face_name2,
             'status': 'unfinished',
+            'owner': flask_login.current_user.id,
             'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         }
         info_str = json.dumps(info)
@@ -57,7 +59,7 @@ def face_submit():
 
 
 @face_service_print.route('/get_result', methods=['GET'])
-@flask_login.login_required
+@upper_visitor
 def get_result():
     ans = {'status': 200, 'err_msg': ''}
     try:
@@ -84,7 +86,7 @@ def get_result():
 
 
 @face_service_print.route('/face_upload', methods=['POST'])
-@flask_login.login_required
+@upper_visitor
 def face_upload():
     if 'file' not in flask.request.files:
         return flask.jsonify({'status': 500, 'err_msg': '[Face_Web] No file in files'})
@@ -100,7 +102,7 @@ def face_upload():
     return response.text
 
 @face_service_print.route('/get_image_file/<timestamp>/<filename>')
-@flask_login.login_required
+# @upper_visitor
 def face_file(timestamp, filename):
     try:
         face_get_file_url = configs.app_storage_host + configs.app_storage_getfile_interface + '/' + timestamp + '/' + filename
@@ -115,7 +117,8 @@ def face_file(timestamp, filename):
 
 @face_service_print.route('/web/face_data')
 @cross_origin()
-# @flask_login.login_required
+# @upper_visitor
+@flask_login.login_required
 def get_face_data_interface():
     print('xxxx')
     head = {"code": 0, "msg": "", "count": 10000, "data": []}
@@ -140,8 +143,18 @@ def get_face_data_interface():
         _message['face_name2'] = each_result['face_name2']
         _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name2'])
         _message['score'] = each_result['score']
-        _message['owner'] = 'debug'
-        ans_data.append(_message)
+        if 'owner' not in dict(each_result).keys():
+            _message['owner'] = 'debug'
+        else:
+            _message['owner'] = each_result['owner']
+        if _message['owner'] == flask_login.current_user.id:
+            # TODO 如果是正常的用户，只加入该用户的数据，这里应该在db层解决，待优化
+            ans_data.append(_message)
+            continue
+        if _message['owner'] == 'debug' and flask_login.current_user.is_visitor():
+            # 如果是游客，加入debug用户的数据
+            ans_data.append(_message)
+            continue
 
     final_data = []
     start_ind = (page - 1) * limit

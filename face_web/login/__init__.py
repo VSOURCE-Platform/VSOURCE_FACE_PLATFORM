@@ -25,6 +25,24 @@ def member_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+def login_required_and_redirect(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if not flask_login.current_user.is_authenticated:
+            return flask.redirect('/login_page')
+        return func(*args, **kwargs)
+    return decorated_function
+
+def upper_visitor(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if not flask_login.current_user.is_authenticated:
+            return flask.redirect('/login_page')
+        if flask_login.current_user.is_visitor():
+            return flask.redirect('/login_page')
+        return func(*args, **kwargs)
+    return decorated_function
+
 @login_manager.user_loader
 def user_loader(user_login_id):
     user = db_login.get_user_info_from_user_id(user_login_id)
