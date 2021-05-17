@@ -69,18 +69,18 @@ services:
     networks:
       - face_services
 
-  face_front:
-    build: ./face_front
-    ports:
-      - "3000:3000"
-    volumes:
-      - ../face_front:/work
-    expose:
-      - "3000"
-    depends_on:
-      - face_web
-    networks:
-      - face_services
+#  face_front:
+#    build: ./face_front
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ../face_front:/work
+#    expose:
+#      - "3000"
+#    depends_on:
+#      - face_web
+#    networks:
+#      - face_services
 
   face_storage:
     build: ./face_storage
