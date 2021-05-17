@@ -4,6 +4,7 @@
 # @Function : TODO
 
 from flask import Flask
+from flask_login import LoginManager
 import pymongo
 
 import configs
@@ -17,7 +18,9 @@ def create_app():
 
     client = pymongo.MongoClient(host=configs.app_database_host, port=configs.app_database_port)
     db = client[configs.app_database_name]
+    auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
     return app, db
 
 app, db = create_app()
-cors = CORS(app)
+CORS(app, supports_credentials=True, resources=r'/*')
+login_manager = LoginManager(app)

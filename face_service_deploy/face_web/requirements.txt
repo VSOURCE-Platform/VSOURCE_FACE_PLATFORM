@@ -6,3 +6,4 @@ redis==2.10.5
 kafka-python
 requests
 flask-cors
+flask-login

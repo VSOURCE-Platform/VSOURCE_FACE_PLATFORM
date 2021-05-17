@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>上传页面</title>
 <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <style>
   .layui-input{
       width: 200px;
@@ -14,13 +15,15 @@
 
 <form class="layui-form" action="">
   <div class="layui-upload">
-    <button type="button" class="layui-btn" id="test1">上传图片1</button>
+    <button type="button" class="layui-btn layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+        transform transition" id="test1">上传图片1</button>
     <div class="layui-upload-list">
       <p id="demoText1">暂未上传</p>
     </div>
   </div>
   <div class="layui-upload">
-    <button type="button" class="layui-btn" id="test2">上传图片2</button>
+    <button type="button" class="layui-btn layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+        transform transition" id="test2">上传图片2</button>
     <div class="layui-upload-list">
       <p id="demoText2">暂未上传</p>
     </div>
@@ -28,7 +31,8 @@
 
   <div class="layui-form-item">
     <div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+      <button class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+        transform transition" lay-submit lay-filter="formDemo">立即提交</button>
     </div>
   </div>
 </form>

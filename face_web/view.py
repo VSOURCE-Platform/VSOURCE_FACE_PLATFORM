@@ -3,7 +3,7 @@
 # @File     : vie.py
 # @Function : TODO
 
-from flask import request, render_template, make_response
+from flask import request, make_response
 from app import app, db
 
 import uuid
@@ -18,43 +18,15 @@ import traceback
 
 import configs
 
-from functools import wraps
+from flask_cors import cross_origin
+import flask_login
+from login import upper_visitor
 
+face_service_print = flask.Blueprint('face_service_print', __name__)
 
-from flask_cors import CORS, cross_origin
-
-def check_key(f):
-    @wraps(f)
-    def check(**kwargs):
-        try:
-            access_key = request.args.get('access_key')
-            if access_key != configs.accesskey:
-                flask.abort(403)
-            return f(**kwargs)
-        except Exception as e:
-            flask.abort(403)
-    return check
-
-
-@app.route('/', methods=['GET'])
-# @check_key
-def index_page():
-    return render_template('index.html')
-
-@app.route('/face', methods=['GET'])
-# @check_key
-def main_page():
-    return render_template('main.html')
-
-@app.route('/submit_page')
-# @check_key
-def submit_page():
-    return render_template('submit_page.html')
-
-@app.route('/face_submit', methods=['GET', 'POST'])
+@face_service_print.route('/face_submit', methods=['POST'])
+@upper_visitor
 def face_submit():
-    if flask.request.method == 'GET':
-        return render_template('main.html')
     ans = {'status': 200, 'err_msg': ''}
     try:
         face_name1 = flask.request.form.get('face_name1')
@@ -65,6 +37,7 @@ def face_submit():
             'face_name1': face_name1,
             'face_name2': face_name2,
             'status': 'unfinished',
+            'owner': flask_login.current_user.id,
             'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         }
         info_str = json.dumps(info)
@@ -85,8 +58,8 @@ def face_submit():
     return ans
 
 
-@app.route('/get_result', methods=['GET'])
-# @check_key
+@face_service_print.route('/get_result', methods=['GET'])
+@upper_visitor
 def get_result():
     ans = {'status': 200, 'err_msg': ''}
     try:
@@ -112,7 +85,8 @@ def get_result():
 
 
 
-@app.route('/face_upload', methods=['POST'])
+@face_service_print.route('/face_upload', methods=['POST'])
+@upper_visitor
 def face_upload():
     if 'file' not in flask.request.files:
         return flask.jsonify({'status': 500, 'err_msg': '[Face_Web] No file in files'})
@@ -127,8 +101,8 @@ def face_upload():
     print(response.text)
     return response.text
 
-@app.route('/get_image_file/<timestamp>/<filename>')
-# @check_key
+@face_service_print.route('/get_image_file/<timestamp>/<filename>')
+# @upper_visitor
 def face_file(timestamp, filename):
     try:
         face_get_file_url = configs.app_storage_host + configs.app_storage_getfile_interface + '/' + timestamp + '/' + filename
@@ -141,10 +115,12 @@ def face_file(timestamp, filename):
         return flask.jsonify({'status': 500, 'err_msg': str(e)})
 
 
-@app.route('/web/face_data')
+@face_service_print.route('/web/face_data')
 @cross_origin()
-# @check_key
+# @upper_visitor
+@flask_login.login_required
 def get_face_data_interface():
+    print('xxxx')
     head = {"code": 0, "msg": "", "count": 10000, "data": []}
     limit = int(request.values.get('limit'))
     page = int(request.values.get('page'))
@@ -153,7 +129,7 @@ def get_face_data_interface():
         limit = 10
     if not page:
         page = 1
-    auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
+
     results = db[configs.app_database_table].find()
     ans_data = []
     for each_result in results:
@@ -163,10 +139,22 @@ def get_face_data_interface():
         _message['createDate'] = each_result['create_date']
         _message['collectedDate'] = each_result['collected_date']
         _message['face_name1'] = each_result['face_name1']
+        _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name1'])
         _message['face_name2'] = each_result['face_name2']
+        _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name2'])
         _message['score'] = each_result['score']
-        _message['owner'] = 'debug'
-        ans_data.append(_message)
+        if 'owner' not in dict(each_result).keys():
+            _message['owner'] = 'debug'
+        else:
+            _message['owner'] = each_result['owner']
+        if _message['owner'] == flask_login.current_user.id:
+            # TODO 如果是正常的用户，只加入该用户的数据，这里应该在db层解决，待优化
+            ans_data.append(_message)
+            continue
+        if _message['owner'] == 'debug' and flask_login.current_user.is_visitor():
+            # 如果是游客，加入debug用户的数据
+            ans_data.append(_message)
+            continue
 
     final_data = []
     start_ind = (page - 1) * limit
