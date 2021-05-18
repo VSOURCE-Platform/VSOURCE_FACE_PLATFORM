@@ -137,7 +137,6 @@
 <script src="/static/layui/layui.js"></script>
 <script>
 window.onload = function(){
-    $("#service_status").attr("text-green");
     $.ajax(
         "/now_user", {
         method: 'GET',
@@ -186,14 +185,26 @@ layui.use(['element', 'table'], function(){
   });
 
   $('#newButton').on('click', function(){
-    layer.open({
-        type:2,
-        title: "提交请求页面",
-        shadeClose: true,
-        shade: 0.8,
-        content: '/submit_page',
-        area: ['800px', '600px']
+    $.ajax(
+        "/now_user", {
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.service_status == 'Active'){
+              layer.open({
+                  type:2,
+                  title: "提交请求页面",
+                  shadeClose: true,
+                  shade: 0.8,
+                  content: '/submit_page',
+                  area: ['400px', '400px']
+              });
+            }else {
+                layer.msg("No permission to create!");
+            }
+        }
     });
+
   });
 
   $('#refreshButton').on('click', function(){

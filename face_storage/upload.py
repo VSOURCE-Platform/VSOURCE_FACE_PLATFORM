@@ -51,3 +51,15 @@ def face_file(timestamp, filename):
     except Exception as e:
         traceback.print_exc()
         return flask.jsonify({'status': 500, 'err_msg': str(e)})
+
+@upload_api.route('/get_scaled_image_file/<timestamp>/<filename>')
+# TODO scaled image file
+def get_scaled_face_file(timestamp, filename):
+    try:
+        uploader_folder = app.config['UPLOAD_FOLDER']
+        save_dir = os.path.join(uploader_folder, 'face_recognition')
+        file_path = os.path.join(save_dir, timestamp, filename)
+        return flask.send_file(file_path) # flask.Response
+    except Exception as e:
+        traceback.print_exc()
+        return flask.jsonify({'status': 500, 'err_msg': str(e)})

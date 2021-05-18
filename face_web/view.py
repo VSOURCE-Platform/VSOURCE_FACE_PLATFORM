@@ -102,7 +102,6 @@ def face_upload():
     return response.text
 
 @face_service_print.route('/get_image_file/<timestamp>/<filename>')
-# @upper_visitor
 def face_file(timestamp, filename):
     try:
         face_get_file_url = configs.app_storage_host + configs.app_storage_getfile_interface + '/' + timestamp + '/' + filename
@@ -114,6 +113,17 @@ def face_file(timestamp, filename):
         traceback.print_exc()
         return flask.jsonify({'status': 500, 'err_msg': str(e)})
 
+@face_service_print.route('/get_scaled_image_file/<timestamp>/<filename>')
+def get_scaled_face_file(timestamp, filename):
+    try:
+        face_get_file_url = configs.app_storage_host + configs.app_storage_getfile_interface + '/' + timestamp + '/' + filename
+        result = requests.get(face_get_file_url)
+        response = make_response(result.content)
+        response.headers = dict(result.headers)
+        return response
+    except Exception as e:
+        traceback.print_exc()
+        return flask.jsonify({'status': 500, 'err_msg': str(e)})
 
 @face_service_print.route('/web/face_data')
 @cross_origin()

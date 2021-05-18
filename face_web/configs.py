@@ -41,6 +41,7 @@ app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
 app_storage_host = 'http://face_storage:12350'
 app_storage_interface = '/face_upload'
 app_storage_getfile_interface = '/get_image_file'
+app_storage_get_scaled_file_interface = '/get_scaled_image_file'
 
 import datetime
 visitor_expire_time = datetime.timedelta(minutes=30)
