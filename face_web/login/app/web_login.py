@@ -98,6 +98,15 @@ def logout():
 @login_print.route('/now_user', methods=['GET'])
 @flask_login.login_required
 def now_user():
+    service_status = 'Active'
     if flask_login.current_user.is_visitor():
-        return flask.jsonify({'status': 200, 'username': str(flask_login.current_user.id)[:15]})
-    return flask.jsonify({'status': 200, 'username': flask_login.current_user.id})
+        if flask_login.current_user.is_visitor():
+            service_status = 'No Permission (visitor user)'
+        return flask.jsonify({'status': 200,
+                              'username': str(flask_login.current_user.id)[:15],
+                              'user_permission': str(flask_login.current_user.permission),
+                              'service_status': service_status})
+    return flask.jsonify({'status': 200,
+                          'username': str(flask_login.current_user.id),
+                          'user_permission': str(flask_login.current_user.permission),
+                          'service_status': service_status})

@@ -18,11 +18,6 @@ def index_page():
 def login_page():
     return flask.render_template('login.html')
 
-#
-# @page_print.route('/face', methods=['GET'])
-# def main_page():
-#     return flask.render_template('main.html')
-
 @page_print.route('/face_dashboard', methods=['GET'])
 @login_required_and_redirect
 def face_dashboard_page():

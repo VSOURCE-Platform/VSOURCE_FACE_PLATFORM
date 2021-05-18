@@ -67,11 +67,56 @@
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Replace with your content -->
       <div class="px-4 py-6 sm:px-0">
-<!--        <div class="border-4 border-dashed border-gray-200 rounded-lg h-96">-->
-<!--          这里放一些状态栏-->
-<!--          </div>-->
+        <div class="border-4 border-dashed border-gray-200 rounded-lg h-88">
+          <div class="m-3 bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Face Service Status
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                Information and details are listed below.
+              </p>
+            </div>
+            <div class="border-t border-gray-200">
+              <dl>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service Describe
+                  </dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    Calculate the probability that two face images are from same person.
+                  </dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    User permission
+                  </dt>
+                  <dd id="user_permission" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    loading...
+                  </dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service Status
+                  </dt>
+                  <dd id="service_status" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    loading...
+                  </dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service API
+                  </dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    /face_submit
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          </div>
           <script type="text/html" id="faceToolbarDemo">
-          <div class="layui-btn-container">
+          <div class="mt-2 layui-btn-container">
             <!-- <button class="layui-btn layui-btn-sm" lay-event="makeNew">新建</button> -->
             <a id="newButton" class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
         transform transition"> Create </a>
@@ -92,13 +137,25 @@
 <script src="/static/layui/layui.js"></script>
 <script>
 window.onload = function(){
+    $("#service_status").attr("text-green");
     $.ajax(
         "/now_user", {
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            obj = document.getElementById('user_name');
-            obj.innerHTML = data.username;
+            $("#user_name").text(data.username);
+            $("#user_permission").text(data.user_permission);
+            $("#service_status").text(data.service_status);
+            if (data.service_status == 'Active'){
+                $("#service_status").removeClass("text-gray-900");
+                $("#service_status").removeClass("text-red-400");
+                $("#service_status").addClass("text-green-400");
+            }else {
+                $("#service_status").removeClass("text-gray-900");
+                $("#service_status").removeClass("text-green-400");
+                $("#service_status").addClass("text-red-400");
+            }
+
         }
     });
 }
