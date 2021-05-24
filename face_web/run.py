@@ -3,11 +3,10 @@
 # @File     : run.py
 # @Function : TODO
 
-import view
 from app import app
 from pages import page_print
 from login.app.web_login import login_print
-from view import face_service_print
+from face_service import face_service_print
 
 app.register_blueprint(page_print)
 app.register_blueprint(login_print)

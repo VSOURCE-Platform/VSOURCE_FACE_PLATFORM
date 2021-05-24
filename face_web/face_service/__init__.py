@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Author   : Ecohnoch(xcy)
-# @File     : vie.py
+# @File     : __init__.py
 # @Function : TODO
 
 from flask import request, make_response
@@ -130,33 +130,53 @@ def get_scaled_face_file(timestamp, filename):
 # @upper_visitor
 @flask_login.login_required
 def get_face_data_interface():
-    print('xxxx')
     head = {"code": 0, "msg": "", "count": 10000, "data": []}
     limit = int(request.values.get('limit'))
     page = int(request.values.get('page'))
-    print(limit, page)
     if not limit:
         limit = 10
     if not page:
         page = 1
 
+    all_requests = db[configs.app_database_request_table].find()
     results = db[configs.app_database_table].find()
     ans_data = []
-    for each_result in results:
+    for each_request in all_requests:
         _message = {}
-        _message['id'] = each_result['id']
-        _message['status'] = each_result['status']
-        _message['createDate'] = each_result['create_date']
-        _message['collectedDate'] = each_result['collected_date']
-        _message['face_name1'] = each_result['face_name1']
-        _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name1'])
-        _message['face_name2'] = each_result['face_name2']
-        _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(each_result['face_name2'])
-        _message['score'] = each_result['score']
-        if 'owner' not in dict(each_result).keys():
-            _message['owner'] = 'debug'
+        _id = each_request['id']
+        task_finished = -1
+        for idx, each_result in enumerate(results):
+            if _id == each_result['id']:
+                task_finished = idx
+                break
+        if task_finished != -1:
+            # 任务已经结束，拿到任务的所有信息
+            each_result = results[task_finished]
+            _message['id'] = each_result['id']
+            _message['status'] = each_result['status']
+            _message['createDate'] = each_result['create_date']
+            _message['collectedDate'] = each_result['collected_date']
+            _message['face_name1'] = each_result['face_name1']
+            _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(
+                each_result['face_name1'])
+            _message['face_name2'] = each_result['face_name2']
+            _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_image_file/{}\">'.format(
+                each_result['face_name2'])
+            _message['score'] = each_result['score']
+            if 'owner' not in dict(each_result).keys():
+                _message['owner'] = each_result['owner']
+            else:
+                _message['owner'] = 'debug'
         else:
-            _message['owner'] = each_result['owner']
+            # 任务暂未结束，拿到用户信息和状态
+            _message['id'] = each_request['id']
+            _message['status'] = each_request['status']
+            _message['createDate'] = each_request['create_date']
+            if 'owner' not in dict(each_request).keys():
+                _message['owner'] = each_request['owner']
+            else:
+                _message['owner'] = 'debug'
+
         if _message['owner'] == flask_login.current_user.id:
             # TODO 如果是正常的用户，只加入该用户的数据，这里应该在db层解决，待优化
             ans_data.append(_message)
