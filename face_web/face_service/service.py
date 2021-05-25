@@ -17,7 +17,8 @@ def get_data_from_page_limit(page, limit):
         _id = each_request['id']
         task_finished = -1
         for idx, each_result in enumerate(results):
-            if _id == each_result['id']:
+            print(_id, each_result['id'])
+            if str(_id) == str(each_result['id']):
                 task_finished = idx
                 break
         print(task_finished)
