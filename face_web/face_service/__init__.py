@@ -164,18 +164,18 @@ def get_face_data_interface():
                 each_result['face_name2'])
             _message['score'] = each_result['score']
             if 'owner' not in dict(each_result).keys():
-                _message['owner'] = each_result['owner']
-            else:
                 _message['owner'] = 'debug'
+            else:
+                _message['owner'] = each_result['owner']
         else:
             # 任务暂未结束，拿到用户信息和状态
             _message['id'] = each_request['id']
             _message['status'] = each_request['status']
             _message['createDate'] = each_request['create_date']
             if 'owner' not in dict(each_request).keys():
-                _message['owner'] = each_request['owner']
-            else:
                 _message['owner'] = 'debug'
+            else:
+                _message['owner'] = each_request['owner']
 
         if _message['owner'] == flask_login.current_user.id:
             # TODO 如果是正常的用户，只加入该用户的数据，这里应该在db层解决，待优化
