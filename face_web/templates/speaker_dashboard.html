@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Speaker Service</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+<!--    .layui-table-cell{-->
+<!--        height: 54px;-->
+<!--        line-height: 54px;-->
+<!--    }-->
+  </style>
+</head>
+<body class="bg-gray-20">
+<div>
+  <nav class="bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <a class="px-2 py-1 h-8 w-16 text-white" href="/">VSOURCE</a>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Speaker Recognition</a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <button class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              <span class="sr-only">View notifications</span>
+              <!-- Heroicon name: outline/bell -->
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+            </button>
+
+            <!-- Profile dropdown -->
+            <div class="ml-3 relative">
+              <ul class="layui-nav max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <li class="layui-nav-item">
+                  <a id="user_name" href="javascript:;">Me</a>
+                  <dl class="layui-nav-child">
+                  <dd><a href="/logout">Logout</a></dd>
+                  </dl>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold text-gray-900">
+        Speaker Recognition
+      </h1>
+    </div>
+  </header>
+  <main>
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <!-- Replace with your content -->
+      <div class="px-4 py-6 sm:px-0">
+        <div class="border-4 border-dashed border-gray-200 rounded-lg h-88">
+          <div class="m-3 bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Speaker Recognition Service Status
+              </h3>
+              <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                Information and details are listed below.
+              </p>
+            </div>
+            <div class="border-t border-gray-200">
+              <dl>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service Describe
+                  </dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    Calculate the probability that two audio (*.wav) are from same person.
+                  </dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    User permission
+                  </dt>
+                  <dd id="user_permission" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    loading...
+                  </dd>
+                </div>
+                <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service Status
+                  </dt>
+                  <dd id="service_status" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    loading...
+                  </dd>
+                </div>
+                <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt class="text-sm font-medium text-gray-500">
+                    Service API
+                  </dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    /speaker_submit
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          </div>
+          <script type="text/html" id="toolbarDemo">
+          <div class="mt-2 layui-btn-container">
+            <!-- <button class="layui-btn layui-btn-sm" lay-event="makeNew">新建</button> -->
+            <a id="newButton" class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+        transform transition"> Create </a>
+            <a id="refreshButton" class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+        transform transition"> Refresh </a>
+          </div>
+        </script>
+        <table id="mainTable" lay-filter="tableFilter"></table>
+
+      </div>
+      <!-- /End replace -->
+    </div>
+  </main>
+</div>
+</body>
+
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+window.onload = function(){
+    $.ajax(
+        "/now_user", {
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $("#user_name").text(data.username);
+            $("#user_permission").text(data.user_permission);
+            $("#service_status").text(data.service_status);
+            if (data.service_status == 'Active'){
+                $("#service_status").removeClass("text-gray-900");
+                $("#service_status").removeClass("text-red-400");
+                $("#service_status").addClass("text-green-400");
+            }else {
+                $("#service_status").removeClass("text-gray-900");
+                $("#service_status").removeClass("text-green-400");
+                $("#service_status").addClass("text-red-400");
+            }
+        }
+    });
+}
+</script>
+<script>
+layui.use(['element', 'table'], function(){
+  var element = layui.element;
+  var table = layui.table;
+
+  table.render({
+    elem: '#mainTable'
+    ,height: 'full-10'
+    ,skin: 'line'
+    ,toolbar: '#toolbarDemo'
+    ,url: '/web/speaker_data' //数据接口
+    ,page: true //开启分页
+    ,initSort: {field: 'createDate', type:'desc'}
+    ,cols: [[ //表头
+      {field: 'id', title: 'id', width:100, sort: true},
+      {field: 'status', title: 'status', width:100},
+      {field: 'createDate', title: 'create date', align: 'center', width:180},
+      {field: 'collectedDate', title: 'finished date', align: 'center', width:180},
+      {field: 'speaker_name1', title: 'audio1', align: 'center', width:200},
+      {field: 'speaker_name2', title: 'audio2', align: 'center', width:200},
+      {field: 'score', title: 'score', align: 'center', width:100},
+      {field: 'owner', title: 'owner', align: 'center', width:100},
+    ]]
+  });
+
+  $('#newButton').on('click', function(){
+    $.ajax(
+        "/now_user", {
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data.service_status == 'Active'){
+              layer.open({
+                  type:2,
+                  title: "提交请求页面",
+                  shadeClose: true,
+                  shade: 0.8,
+                  content: '/speaker_submit_page',
+                  area: ['400px', '400px']
+              });
+            }else {
+                layer.msg("No permission to create!");
+            }
+        }
+    });
+
+  });
+
+  $('#refreshButton').on('click', function(){
+    window.location.reload();
+  });
+});
+</script>
+</html>

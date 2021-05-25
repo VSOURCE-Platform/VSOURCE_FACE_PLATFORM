@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>上传页面</title>
+<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+  .layui-input{
+      width: 200px;
+  }
+</style>
+</head>
+<body>
+
+<form class="layui-form min-h-screen flex items-center justify-center bg-gray-20 py-12 px-4 sm:px-6 lg:px-8" action="">
+  <div class="max-w-md w-full space-y-8">
+    <div class="layui-upload">
+      <button type="button" class="layui-btn layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+          transform transition" id="test1">上传音频1</button>
+      <div class="layui-upload-list">
+        <p id="demoText1">暂未上传</p>
+      </div>
+    </div>
+    <div class="layui-upload">
+      <button type="button" class="layui-btn layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+          transform transition" id="test2">上传音频2</button>
+      <div class="layui-upload-list">
+        <p id="demoText2">暂未上传</p>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
+          transform transition" lay-submit lay-filter="formDemo">立即提交</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+  layui.use('upload', function(){
+    var upload = layui.upload;
+
+    var uploadInst = upload.render({
+      elem: '#test1'
+      ,url: '/speaker_upload'
+      ,type:'post'
+      ,accept: 'file'
+      ,exts: 'wav'
+      ,size: 50000
+      ,before: function(obj){}
+      ,done: function(res){
+        //如果上传失败
+        if(res.code > 0){
+          return layer.msg('上传失败');
+        }
+        //上传成功
+        document.getElementById("demoText1").innerHTML = res.return_path;
+      }
+    });
+  });
+   layui.use('upload', function(){
+    var upload = layui.upload;
+    var uploadInst = upload.render({
+      elem: '#test2'
+      ,url: '/speaker_upload'
+      ,type:'post'
+      ,accept: 'file'
+      ,exts: 'wav'
+      ,size: 50000
+      ,before: function(obj){}
+      ,done: function(res){
+        //如果上传失败
+        if(res.code > 0){
+          return layer.msg('上传失败');
+        }
+        //上传成功
+        document.getElementById("demoText2").innerHTML = res.return_path;
+      }
+    });
+  });
+  // Demo
+  layui.use('form', function() {
+      var form = layui.form;
+      //监听提交
+      form.on('submit(formDemo)', function (data) {
+          if (document.getElementById("demoText1").innerHTML == '暂未上传' ||
+              document.getElementById("demoText2").innerHTML == '暂未上传') {
+              layer.msg("文件尚未上传");
+          } else {
+              $.ajax({
+                  type: 'post'
+                  ,
+                  url: '/speaker_submit'
+                  ,
+                  data: {
+                      'speaker_name1': document.getElementById("demoText1").innerHTML,
+                      'speaker_name2': document.getElementById("demoText2").innerHTML
+                  }
+                  ,
+                  success: function (result) {
+                      console.log(result);
+                      if (result.status == 200) {
+                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                        parent.layer.close(index);
+                        // window.parent.location.reload();
+                      }else {
+                          layer.alert("发生错误：" + result.err_msg);
+                      }
+                  }
+                  ,
+                  error: function () {
+                      alert("Err");
+                  }
+              });
+              return false;
+          }
+      });
+  });
+</script>
+</body>
+</html>

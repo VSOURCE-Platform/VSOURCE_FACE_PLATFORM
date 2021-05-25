@@ -30,6 +30,12 @@ app_database_port = 27017
 app_database_table_name = 'face_list'
 app_database_request_table = 'face_requests'
 
+app_speaker_table_name = 'speaker_list'
+app_speaker_request_table = 'speaker_requests'
+app_kafka_speaker_topic = 'speaker_queue'
+app_kafka_speaker_key = 'speaker_requests'
+
+
 app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
     app_database_user,
     app_database_pwd,
@@ -41,7 +47,9 @@ app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
 app_storage_host = 'http://face_storage:12350'
 app_storage_interface = '/face_upload'
 app_storage_getfile_interface = '/get_image_file'
-app_storage_get_scaled_file_interface = '/get_scaled_image_file'
+
+app_speaker_storage_interface = '/speaker_upload'
+app_speaker_storage_getfile_interface = '/get_speaker_file'
 
 import datetime
 visitor_expire_time = datetime.timedelta(minutes=30)
