@@ -3,6 +3,7 @@
 # @File     : service.py
 # @Function : TODO
 
+import copy
 import flask_login
 
 from app import app, db
@@ -15,16 +16,10 @@ def get_data_from_page_limit(page, limit):
     for each_request in all_requests:
         _message = {}
         _id = each_request['id']
-        task_finished = -1
-        for idx, each_result in enumerate(results):
-            print(_id, each_result['id'])
-            if str(_id) == str(each_result['id']):
-                task_finished = idx
-                break
-        print(task_finished)
-        if task_finished != -1:
+        this_result = db[configs.app_database_table].find_one({'id': str(_id)})
+        if this_result:
             # 任务已经结束，拿到任务的所有信息
-            each_result = list(results)[task_finished]
+            each_result = copy.deepcopy(this_result)
             _message['id'] = each_result['id']
             _message['status'] = each_result['status']
             _message['createDate'] = each_result['create_date']
