@@ -151,7 +151,7 @@ def get_face_data_interface():
                 break
         if task_finished != -1:
             # 任务已经结束，拿到任务的所有信息
-            each_result = results[task_finished]
+            each_result = list(results)[task_finished]
             _message['id'] = each_result['id']
             _message['status'] = each_result['status']
             _message['createDate'] = each_result['create_date']
