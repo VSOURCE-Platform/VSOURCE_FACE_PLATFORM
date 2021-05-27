@@ -58,6 +58,17 @@ services:
     networks:
       - face_services
 
+  speaker_calculator:
+    build: ./speaker_calculator
+    volumes:
+      - ../speaker_calculator:/work
+    depends_on:
+      - my_kafka
+      - my_redis
+      - my_zookeeper
+    networks:
+      - face_services
+
   face_web:
     build: ./face_web
     ports:
@@ -69,18 +80,6 @@ services:
     networks:
       - face_services
 
-#  face_front:
-#    build: ./face_front
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ../face_front:/work
-#    expose:
-#      - "3000"
-#    depends_on:
-#      - face_web
-#    networks:
-#      - face_services
 
   face_storage:
     build: ./face_storage
