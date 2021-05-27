@@ -24,11 +24,11 @@ def get_data_from_page_limit(page, limit):
             _message['createDate'] = each_result['create_date']
             _message['collectedDate'] = each_result['collected_date']
             _message['speaker_name1'] = each_result['speaker_name1']
-            _message['speaker_name1'] = '<audio width=\"100px\" height=\"50px\" src=\"/get_speaker_file/{}\">'.format(
-                each_result['speaker_name1'])
+            _message['speaker_name1'] = '<audio controls class=\"audio-player\" preload=\"metadata\" width=\"100px\" ><source src=\"{}\" type=\"audio/wav\"></audio>'.format('/get_speaker_file/'+each_result['speaker_name1'])
+
             _message['speaker_name2'] = each_result['speaker_name2']
-            _message['speaker_name2'] = '<audio width=\"100px\" height=\"50px\" src=\"/get_speaker_file/{}\">'.format(
-                each_result['speaker_name2'])
+            _message['speaker_name2'] = '<audio controls class=\"audio-player\" preload=\"metadata\" width=\"100px\" ><source src=\"{}\" type=\"audio/wav\"></audio>'.format('/get_speaker_file/'+each_result['speaker_name2'])
+
             _message['score'] = each_result['score']
             if 'owner' not in dict(each_result).keys():
                 _message['owner'] = 'debug'

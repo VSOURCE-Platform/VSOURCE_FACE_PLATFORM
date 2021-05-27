@@ -19,7 +19,7 @@ import traceback
 import configs
 
 import flask_login
-import face_service.service as service
+import speaker_service.service as service
 from flask_cors import cross_origin
 from login import upper_visitor
 
@@ -89,7 +89,7 @@ def speaker_file(timestamp, filename):
 @cross_origin()
 # @upper_visitor
 @flask_login.login_required
-def get_face_data_interface():
+def get_speaker_data_interface():
     head = {"code": 0, "msg": "", "count": 10000, "data": []}
     limit = int(request.values.get('limit'))
     page = int(request.values.get('page'))

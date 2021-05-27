@@ -18,6 +18,8 @@ app_result_key = 'RESULT_KEY'
 app_kafka_host = 'my_kafka:9092'
 app_kafka_topic = 'user_queue'
 app_kafka_key = 'user_requests'
+app_kafka_speaker_topic = 'speaker_queue'
+app_kafka_speaker_key = 'speaker_requests'
 
 
 app_database_host = 'my_mongo' # if don't use docker, so this is 'localhost'
@@ -29,11 +31,9 @@ app_database_port = 27017
 
 app_database_table_name = 'face_list'
 app_database_request_table = 'face_requests'
-
 app_speaker_table_name = 'speaker_list'
 app_speaker_request_table = 'speaker_requests'
-app_kafka_speaker_topic = 'speaker_queue'
-app_kafka_speaker_key = 'speaker_requests'
+
 
 
 app_mongo_uri  = "mongodb://{}:{}@{}:{}/{}".format(
