@@ -8,8 +8,10 @@ app_redis_port     = 6379
 
 app_info_key = 'INFO_KEY'
 app_response_key = 'RESPONSE_KEY'
+app_error_key = 'ERROR_KEY'
 app_speaker_info_key = 'SPEAKER_INFO_KEY'
 app_speaker_response_key = 'SPEAKER_RESPONSE_KEY'
+app_speaker_error_key = 'SPEAKER_ERROR_KEY'
 
 app_database_host = 'my_mongo' # if don't use docker, so this is 'localhost'
 app_database_name = 'face_recognition'

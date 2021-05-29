@@ -19,6 +19,7 @@ class Service:
         self.redis_port = configs.app_redis_port
         self.INFO_KEY = configs.app_info_key
         self.RESPONSE_KEY = configs.app_response_key
+        self.ERROR_KEY = configs.app_error_key
         self.group_id = configs.app_group_id
 
     def start(self):
@@ -32,30 +33,35 @@ class Service:
         while True:
             try:
                 consumer = kafka.KafkaConsumer(configs.app_kafka_topic,
-                                               group_id=self.group_id
-                                               ,bootstrap_servers=[configs.app_kafka_host])
+                                               group_id=self.group_id,
+                                               bootstrap_servers=[configs.app_kafka_host])
                 for msg in consumer:
-                    info_str = msg.value
-                    if not info_str or info_str is None:
-                        time.sleep(configs.call_interval)
+                    try:
+                        info_str = msg.value
+                        if not info_str or info_str is None:
+                            time.sleep(configs.call_interval)
+                            continue
+
+                        info_str = str(info_str, encoding = "utf-8")
+                        print(info_str)
+                        info = json.loads(info_str)
+                        face1 = info['face_name1']
+                        face2 = info['face_name2']
+                        face_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
+                        real_face1 = request.urlopen(face_file_inerface + face1)
+                        real_face2 = request.urlopen(face_file_inerface + face2)
+                        score = face_recognition_with_image(fs, real_face1, real_face2)
+
+                        ans = copy.deepcopy(info)
+                        ans['status'] = 'finished'
+                        ans['score'] = str(round(score, 3))
+                        # ans = {'id': info['id'], 'score': str(score)}
+                        ans_str = json.dumps(ans)
+                        assert r.rpush(self.RESPONSE_KEY, ans_str)
+                    except Exception as e:
+                        traceback.print_exc()
+                        assert r.rpush(self.ERROR_KEY, ans_str)
                         continue
-
-                    info_str = str(info_str, encoding = "utf-8")
-                    print(info_str)
-                    info = json.loads(info_str)
-                    face1 = info['face_name1']
-                    face2 = info['face_name2']
-                    face_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
-                    real_face1 = request.urlopen(face_file_inerface + face1)
-                    real_face2 = request.urlopen(face_file_inerface + face2)
-                    score = face_recognition_with_image(fs, real_face1, real_face2)
-
-                    ans = copy.deepcopy(info)
-                    ans['status'] = 'finished'
-                    ans['score'] = str(round(score, 3))
-                    # ans = {'id': info['id'], 'score': str(score)}
-                    ans_str = json.dumps(ans)
-                    assert r.rpush(self.RESPONSE_KEY, ans_str)
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)
