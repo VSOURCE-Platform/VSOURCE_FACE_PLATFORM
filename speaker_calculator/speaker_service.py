@@ -20,6 +20,7 @@ class Service:
         self.redis_port = configs.app_redis_port
         self.INFO_KEY = configs.app_info_key
         self.RESPONSE_KEY = configs.app_response_key
+        self.SPEAKER_ERROR_KEY = configs.app_speaker_error_key
         self.group_id = configs.app_group_id
 
     def start(self):
@@ -36,26 +37,31 @@ class Service:
                                                group_id=self.group_id
                                                ,bootstrap_servers=[configs.app_kafka_host])
                 for msg in consumer:
-                    info_str = msg.value
-                    if not info_str or info_str is None:
-                        time.sleep(configs.call_interval)
+                    try:
+                        info_str = msg.value
+                        if not info_str or info_str is None:
+                            time.sleep(configs.call_interval)
+                            continue
+
+                        info_str = str(info_str, encoding = "utf-8")
+                        print(info_str)
+                        info = json.loads(info_str)
+                        speech1 = info['speaker_name1']
+                        speech2 = info['speaker_name2']
+                        speech_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
+                        speech_url1 = speech_file_inerface + speech1
+                        speech_url2 = speech_file_inerface + speech2
+                        score = voice_recognition(vs, speech_url1, speech_url2)
+
+                        ans = copy.deepcopy(info)
+                        ans['status'] = 'finished'
+                        ans['score'] = str(round(score, 3))
+                        ans_str = json.dumps(ans)
+                        assert r.rpush(self.RESPONSE_KEY, ans_str)
+                    except Exception as e:
+                        traceback.print_exc()
+                        assert r.rpush(self.SPEAKER_ERROR_KEY, ans_str)
                         continue
-
-                    info_str = str(info_str, encoding = "utf-8")
-                    print(info_str)
-                    info = json.loads(info_str)
-                    speech1 = info['speaker_name1']
-                    speech2 = info['speaker_name2']
-                    speech_file_inerface = configs.app_web_host + configs.app_file_interface + '/'
-                    speech_url1 = speech_file_inerface + speech1
-                    speech_url2 = speech_file_inerface + speech2
-                    score = voice_recognition(vs, speech_url1, speech_url2)
-
-                    ans = copy.deepcopy(info)
-                    ans['status'] = 'finished'
-                    ans['score'] = str(round(score, 3))
-                    ans_str = json.dumps(ans)
-                    assert r.rpush(self.RESPONSE_KEY, ans_str)
             except Exception as e:
                 traceback.print_exc()
                 time.sleep(configs.call_interval)
