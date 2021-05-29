@@ -14,6 +14,13 @@ class User(flask_login.UserMixin):
         except Exception as e:
             return False
 
+    def is_apiuser(self):
+        try:
+            user_permission = db_login.get_user_permission_from_user_id(self.get_id())
+            return user_permission == Permission.APIUSER
+        except:
+            return False
+
     def is_admin(self):
         try:
             user_permission = db_login.get_user_permission_from_user_id(self.get_id())
