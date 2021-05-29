@@ -4,6 +4,7 @@
 # @Function : TODO
 
 import uuid
+import datetime
 import threading
 
 import flask
@@ -34,7 +35,11 @@ def login():
         lock.acquire()
         user_instance.id = username
         user_instance.permission = db_login.get_user_permission_from_user_id(username)
-        flask_login.login_user(user_instance)
+        if user_instance.is_apiuser():
+            # 是apiuser的话三天失效，且持续记住
+            flask_login.login_user(user_instance, remember=True, duration=datetime.timedelta(days=3))
+        else:
+            flask_login.login_user(user_instance)
         lock.release()
         app.logger.info("{}({}) 登录成功".format(username, db_login.get_user_permission_from_user_id(username)))
         rsp = flask.jsonify({'status': 200, 'message': "OK"})
