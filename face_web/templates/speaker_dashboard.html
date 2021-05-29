@@ -23,7 +23,7 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Speaker Recognition</a>
+              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">说话人识别</a>
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
                 <li class="layui-nav-item">
                   <a id="user_name" href="javascript:;">Me</a>
                   <dl class="layui-nav-child">
-                  <dd><a href="/logout">Logout</a></dd>
+                  <dd><a href="/logout">登出</a></dd>
                   </dl>
                 </li>
               </ul>
@@ -58,7 +58,7 @@
   <header class="bg-white shadow">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold text-gray-900">
-        Speaker Recognition
+        说话人识别服务
       </h1>
     </div>
   </header>
@@ -70,25 +70,25 @@
           <div class="m-3 bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
               <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Speaker Recognition Service Status
+                说话人识别服务状态面板
               </h3>
               <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                Information and details are listed below.
+                下方是当前服务状态
               </p>
             </div>
             <div class="border-t border-gray-200">
               <dl>
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">
-                    Service Describe
+                    服务说明
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    Calculate the probability that two audio (*.wav) are from same person.
+                    计算两个音频（*.wav）来自同一个人的概率，分数越大越相似
                   </dd>
                 </div>
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">
-                    User permission
+                    用户权限
                   </dt>
                   <dd id="user_permission" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     loading...
@@ -96,7 +96,7 @@
                 </div>
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">
-                    Service Status
+                    服务状态
                   </dt>
                   <dd id="service_status" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     loading...
@@ -104,7 +104,7 @@
                 </div>
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                   <dt class="text-sm font-medium text-gray-500">
-                    Service API
+                    服务API
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                     /speaker_submit
@@ -118,9 +118,9 @@
           <div class="mt-2 layui-btn-container">
             <!-- <button class="layui-btn layui-btn-sm" lay-event="makeNew">新建</button> -->
             <a id="newButton" class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
-        transform transition"> Create </a>
+        transform transition"> 新建任务 </a>
             <a id="refreshButton" class="layui-btn inline-block rounded-lg px-4 shadow-lg bg-gray-800 text-white hover:bg-indigo-400
-        transform transition"> Refresh </a>
+        transform transition"> 刷新 </a>
           </div>
         </script>
         <table id="mainTable" lay-filter="tableFilter"></table>
