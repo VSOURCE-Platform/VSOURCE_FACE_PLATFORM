@@ -60,7 +60,7 @@ class Service:
                         assert r.rpush(self.RESPONSE_KEY, ans_str)
                     except Exception as e:
                         traceback.print_exc()
-                        assert r.rpush(self.SPEAKER_ERROR_KEY, ans_str)
+                        assert r.rpush(self.SPEAKER_ERROR_KEY, info_str)
                         continue
             except Exception as e:
                 traceback.print_exc()
