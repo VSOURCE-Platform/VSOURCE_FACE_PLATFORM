@@ -25,6 +25,7 @@ from login import upper_visitor
 
 speaker_service_print = flask.Blueprint('speaker_service_print', __name__)
 
+
 @speaker_service_print.route('/speaker_submit', methods=['POST'])
 @upper_visitor
 def speaker_submit():
@@ -56,6 +57,33 @@ def speaker_submit():
         ans['status'] = 500
         ans['err_msg'] = str(e)
     return ans
+
+
+@speaker_service_print.route('/speaker/get_result', methods=['GET'])
+@upper_visitor
+def speaker_get_result():
+    ans = {'status': 200, 'err_msg': ''}
+    try:
+        uu_id = request.args.get('id')
+        uu_id = str(uu_id)
+
+        r = redis.Redis(host=configs.app_redis_hostname, port=configs.app_redis_port)
+        if r.get(uu_id):
+            print('From redis get this result.')
+            return r.get(uu_id)
+        else:
+            auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
+            result = db[configs.app_speaker_table_name].find_one({'id': uu_id})
+            result.pop('_id')
+            ans['result'] = result
+            r.set(uu_id, ans)
+            r.expire(uu_id, configs.app_redis_expire_time)
+            print('Write into redis')
+    except Exception as e:
+        ans['status'] = 500
+        ans['err_msg'] = str(e)
+    return ans
+
 
 @speaker_service_print.route('/speaker_upload', methods=['POST'])
 @upper_visitor
