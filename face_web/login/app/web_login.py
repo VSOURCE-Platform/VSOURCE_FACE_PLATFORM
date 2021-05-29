@@ -96,9 +96,16 @@ def logout():
         return flask.jsonify({'status': 400, 'message': "ERROR"})
 
 @login_print.route('/now_user', methods=['GET'])
-@flask_login.login_required
+# @flask_login.login_required
 def now_user():
     service_status = 'Active'
+    if not flask_login.current_user.is_authenticated:
+        # 未登录
+        service_status = 'Logout'
+        return flask.jsonify({'status': 200,
+                              'username': '未登录用户',
+                              'user_permission': 'NONE',
+                              'service_status': service_status})
     if flask_login.current_user.is_visitor():
         if flask_login.current_user.is_visitor():
             service_status = 'No Permission (visitor user)'
