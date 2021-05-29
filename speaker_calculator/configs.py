@@ -7,6 +7,7 @@ app_redis_hostname = 'my_redis'
 app_redis_port     = 6379
 app_info_key = 'SPEAKER_INFO_KEY'
 app_response_key = 'SPEAKER_RESPONSE_KEY'
+app_speaker_error_key = 'SPEAKER_ERROR_KEY'
 
 app_kafka_host = 'my_kafka:9092'
 app_kafka_topic = 'speaker_queue'
