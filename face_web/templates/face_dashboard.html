@@ -84,7 +84,7 @@
                     服务说明
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    计算两张人脸图像（*.jpg, *.png）来自同一个人的概率，分数越大越相似
+                    计算两张人脸图像（*.jpg, *.png）来自同一个人的概率，分数越大越相似。用户之间的信息是隔离的。
                   </dd>
                 </div>
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -173,14 +173,14 @@ layui.use(['element', 'table'], function(){
     ,page: true //开启分页
     ,initSort: {field: 'createDate', type:'desc'}
     ,cols: [[ //表头
-      {field: 'id', title: 'id', width:100, sort: true},
-      {field: 'status', title: 'status', width:100},
-      {field: 'createDate', title: 'create date', align: 'center', width:180},
-      {field: 'collectedDate', title: 'finished date', align: 'center', width:180},
-      {field: 'face_name1', title: 'face image1', align: 'center', width:200},
-      {field: 'face_name2', title: 'face image2', align: 'center', width:200},
-      {field: 'score', title: 'score', align: 'center', width:100},
-      {field: 'owner', title: 'owner', align: 'center', width:100},
+      {field: 'id', title: '任务id', width:100, sort: true},
+      {field: 'status', title: '任务状态', width:100},
+      {field: 'createDate', title: '新建日期', align: 'center', width:180},
+      {field: 'collectedDate', title: '结束日期', align: 'center', width:180},
+      {field: 'face_name1', title: '人脸图像1', align: 'center', width:200},
+      {field: 'face_name2', title: '人脸图像2', align: 'center', width:200},
+      {field: 'score', title: '对比分数', align: 'center', width:100},
+///      {field: 'owner', title: '', align: 'center', width:100}
     ]]
   });
 

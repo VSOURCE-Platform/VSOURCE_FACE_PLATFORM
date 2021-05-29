@@ -37,7 +37,7 @@ window.onload = function(){
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            var greeting_text = "你好 " data.username + ", 请选择下面的服务";
+            var greeting_text = "你好 " + data.username + ", 请选择下面的服务";
             $("#greeting").text(greeting_text);
         }
     });
