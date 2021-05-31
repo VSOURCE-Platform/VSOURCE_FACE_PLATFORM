@@ -184,10 +184,10 @@ layui.use(['element', 'table'], function(){
       {field: 'createDate', title: '新建日期', align: 'center', width:180, sort: true},
       {field: 'collectedDate', title: '结束日期', align: 'center', width:180, sort: true},
       {field: 'face_name1', title: '人脸图像1', align: 'center', width:200, templet: function(d){
-        return '<div οnclick="show_img(this)" ><img src="'+d.face_name1+'" alt="" width="50px" height="50px"></a></div>';
+        return '<img οnclick="showimg(this)" src="'+d.face_name1+'" alt="" width="50px" height="50px"></a>';
       }},
       {field: 'face_name2', title: '人脸图像2', align: 'center', width:200, templet: function(d){
-        return '<div οnclick="show_img(this)" ><img src="'+d.face_name2+'" alt="" width="50px" height="50px"></a></div>';
+        return '<img οnclick="showimg(this)" src="'+d.face_name2+'" alt="" width="50px" height="50px"></a>';
       }},
       {field: 'score', title: '对比分数', align: 'center', width:100},
 ///      {field: 'owner', title: '', align: 'center', width:100}
@@ -223,7 +223,7 @@ layui.use(['element', 'table'], function(){
 });
 </script>
 <script>
-window.show_img = function (t) {
+window.showimg = function (t) {
       var t = $(t).find("img");
       //页面层
       layer.open({
