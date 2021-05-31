@@ -59,3 +59,9 @@ VSOURCE团队开源一个精美的支持弹性编排的人脸算法平台，支�
 项目中人脸识别的算法参数比较大，而且这个是项目成员自己训练的参数，网络图和配置来自于：[Tiny-Face-Recognition](https://github.com/Ecohnoch/Tiny-Face-Recognition)，有参数后将参数ckpt文件放到项目目录的face_calculator/face_recognition_native_api/ckpt下，如果需要直接拿到我们训练好的参数，参考下面的联系方式，并且请我们再喝一杯咖啡就可以了。
 
 在部署中，如果出现任何的相关问题，可以联系项目成员（qq: 542305306，wechat: x542305306），以一杯咖啡的价格（40元），可以得到成员手把手的帮助和随时的答疑，想加入我们的话也可以直接提交pull request或者联系成员说明即可。
+
+
+
+### Reference
+
+[1] Face Detection: https://github.com/bubbliiiing/retinaface-keras

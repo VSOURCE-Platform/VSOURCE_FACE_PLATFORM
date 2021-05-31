@@ -38,6 +38,16 @@ def speaker_dashboard_page():
 def speaker_submit_page():
     return flask.render_template('speaker_submit_page.html')
 
+@page_print.route('/face_detection_dashboard', methods=['GET'])
+@login_required_and_redirect
+def face_detection_dashboard_page():
+    return flask.render_template('face_detection_dashboard.html')
+
+@page_print.route('/face_detection_submit_page')
+@flask_login.login_required
+def face_detection_submit_page():
+    return flask.render_template('face_detection_submit_page.html')
+
 @page_print.route('/favicon.ico')
 def get_favicon():
     return flask.current_app.send_static_file('favicon.ico')

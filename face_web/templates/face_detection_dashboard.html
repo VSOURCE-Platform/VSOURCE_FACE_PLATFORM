@@ -24,12 +24,12 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">人脸识别</a>
+              <a href="/face_dashboard" class="bg-gray-800 text-white px-3 py-2 rounded-md text-sm font-medium">人脸识别</a>
             </div>
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-              <a href="/face_detection_dashboard" class="bg-gray-800 text-white px-3 py-2 rounded-md text-sm font-medium">人脸检测</a>
+              <a href="#" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">人脸检测</a>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@
   <header class="bg-white shadow">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold text-gray-900">
-        人脸识别服务
+        人脸检测服务
       </h1>
     </div>
   </header>
@@ -76,7 +76,7 @@
           <div class="m-3 bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
               <h3 class="text-lg leading-6 font-medium text-gray-900">
-                人脸识别服务状态面板
+                人脸检测服务状态面板
               </h3>
               <p class="mt-1 max-w-2xl text-sm text-gray-500">
                 下方是当前服务状态
@@ -89,7 +89,7 @@
                     服务说明
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    计算两张人脸图像（*.jpg, *.png）来自同一个人的概率，分数越大越相似。用户之间的信息是隔离的。
+                    得到图像中人脸的区域，可检测小人脸、多个人脸。
                   </dd>
                 </div>
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -113,7 +113,7 @@
                     服务API
                   </dt>
                   <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    /face_submit
+                    /face_detection_submit
                   </dd>
                 </div>
               </dl>
@@ -129,7 +129,7 @@
         transform transition"> 刷新 </a>
           </div>
         </script>
-        <table id="faceMainTable" lay-filter="tableFilter"></table>
+        <table id="faceDetectionMainTable" lay-filter="tableFilter"></table>
 
       </div>
       <!-- /End replace -->
@@ -170,21 +170,19 @@ layui.use(['element', 'table'], function(){
   var table = layui.table;
 
   table.render({
-    elem: '#faceMainTable'
+    elem: '#faceDetectionMainTable'
     ,height: 'full-10'
     ,skin: 'line'
     ,toolbar: '#faceToolbarDemo'
-    ,url: '/web/face_data' //数据接口
+    ,url: '/web/face_detection_data' //数据接口
     ,page: true //开启分页
     ,initSort: {field: 'createDate', type:'desc'}
     ,cols: [[ //表头
       {field: 'id', title: '任务id', width:100},
       {field: 'status', title: '任务状态', width:100},
       {field: 'createDate', title: '新建日期', align: 'center', width:180, sort: true},
-      {field: 'collectedDate', title: '结束日期', align: 'center', width:180, sort: true},
-      {field: 'face_name1', title: '人脸图像1', align: 'center', width:200},
-      {field: 'face_name2', title: '人脸图像2', align: 'center', width:200},
-      {field: 'score', title: '对比分数', align: 'center', width:100},
+      {field: 'face_name1', title: '输入图像', align: 'center', width:200},
+      {field: 'face_name2', title: '输出图像', align: 'center', width:200},
 ///      {field: 'owner', title: '', align: 'center', width:100}
     ]]
   });
@@ -201,7 +199,7 @@ layui.use(['element', 'table'], function(){
                   title: "提交请求页面",
                   shadeClose: true,
                   shade: 0.8,
-                  content: '/submit_page',
+                  content: '/face_detection_submit_page',
                   area: ['400px', '400px']
               });
             }else {

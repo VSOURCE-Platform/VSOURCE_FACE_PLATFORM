@@ -171,10 +171,10 @@ layui.use(['element', 'table'], function(){
     ,page: true //开启分页
     ,initSort: {field: 'createDate', type:'desc'}
     ,cols: [[ //表头
-      {field: 'id', title: '任务id', width:100, sort: true},
+      {field: 'id', title: '任务id', width:100},
       {field: 'status', title: '任务状态', width:100},
-      {field: 'createDate', title: '新建时间', align: 'center', width:180},
-      {field: 'collectedDate', title: '结束时间', align: 'center', width:180},
+      {field: 'createDate', title: '新建时间', align: 'center', width:180, sort: true},
+      {field: 'collectedDate', title: '结束时间', align: 'center', width:180, sort: true},
       {field: 'speaker_name1', title: '音频1', align: 'center', width:200},
       {field: 'speaker_name2', title: '音频2', align: 'center', width:200},
       {field: 'score', title: '对比分数', align: 'center', width:100},
