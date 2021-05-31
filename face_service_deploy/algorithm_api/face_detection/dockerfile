@@ -1,0 +1,20 @@
+FROM python:3.6
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir /work
+RUN pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/
+RUN pip config set install.trusted-host mirrors.aliyun.com
+RUN pip install --upgrade pip
+RUN pip install opencv-python==3.4.2.17
+RUN pip install tensorflow==1.11.0
+RUN pip install keras==2.1.5
+RUN pip install numpy==1.18.5
+RUN pip install requests
+RUN pip install flask
+RUN pip install flask_restful
+RUN pip install flask-auto-api
+RUN pip install h5py==2.10.0
+# RUN pip install requirements.txt
+WORKDIR /work
+CMD python -u configs.py
