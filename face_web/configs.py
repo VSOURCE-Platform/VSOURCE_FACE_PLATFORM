@@ -33,6 +33,7 @@ app_database_table_name = 'face_list'
 app_database_request_table = 'face_requests'
 app_speaker_table_name = 'speaker_list'
 app_speaker_request_table = 'speaker_requests'
+app_face_detection_table_name = 'face_detection_list'
 
 
 
@@ -50,6 +51,10 @@ app_storage_getfile_interface = '/get_image_file'
 
 app_speaker_storage_interface = '/speaker_upload'
 app_speaker_storage_getfile_interface = '/get_speaker_file'
+
+face_detection_url = 'http://face_detection:20001/face_detection'
+face_detection_upload_url = 'http://face_storage:12350/face_detection_upload'
+face_detection_get_url    = 'http://face_storage:12350/get_face_detection_file'
 
 import datetime
 visitor_expire_time = datetime.timedelta(minutes=30)

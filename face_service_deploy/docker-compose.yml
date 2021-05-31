@@ -1,5 +1,16 @@
 version: '3.1'
 services:
+  face_detection:
+    build: ./algorithm_api/face_detection
+    volumes:
+      - ../algorithm_api/face_detection:/work
+    ports:
+      - "20001:20001"
+    expose:
+      - "20001"
+    networks:
+      - face_services
+
   my_redis:
     build: ./my_redis
     ports:
