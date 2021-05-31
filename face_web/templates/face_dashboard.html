@@ -184,20 +184,6 @@ layui.use(['element', 'table'], function(){
       {field: 'createDate', title: '新建日期', align: 'center', width:180, sort: true},
       {field: 'collectedDate', title: '结束日期', align: 'center', width:180, sort: true},
       {field: 'face_name1', title: '人脸图像1', align: 'center', width:200, templet: function(d){
-        function show_img(t) {
-          var t = $(t).find("img");
-          //页面层
-          layer.open({
-            type: 1,
-            skin: 'layui-layer-rim', //加上边框
-             area: ['80%', '80%'], //宽高
-            shadeClose: true, //开启遮罩关闭
-            end: function (index, layero) {
-              return false;
-            },
-            content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
-          });
-        }
         return '<div οnclick="show_img(this)" ><img src="'+d.face_name1+'" alt="" width="50px" height="50px"></a></div>';
       }},
       {field: 'face_name2', title: '人脸图像2', align: 'center', width:200, templet: function(d){
@@ -235,5 +221,21 @@ layui.use(['element', 'table'], function(){
     window.location.reload();
   });
 });
+</script>
+<script>
+window.show_img = function (t) {
+      var t = $(t).find("img");
+      //页面层
+      layer.open({
+        type: 1,
+        skin: 'layui-layer-rim', //加上边框
+         area: ['80%', '80%'], //宽高
+        shadeClose: true, //开启遮罩关闭
+        end: function (index, layero) {
+          return false;
+        },
+        content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
+      });
+    }
 </script>
 </html>
