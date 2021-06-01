@@ -55,6 +55,25 @@ def face_detection():
         ans['err_msg'] = str(e)
         return ans
 
+@app.route('/face_detection_with_box')
+def face_detection():
+    ans = {'status': 200, 'err_msg': ''}
+    try:
+        image_path = flask.request.args.get('image_path')
+        face_image = configs.get_url + '/' + image_path
+        face_image = request.urlopen(face_image)
+        face_image = cv2.imdecode(np.asarray(bytearray(face_image.read()), dtype="uint8"), cv2.IMREAD_COLOR)
+        face_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+        print(face_image.shape)
+        with graph.as_default():
+            ans['result'] = retinaface.detect_image_with_box(face_image)
+        return flask.jsonify(ans)
+    except Exception as e:
+        traceback.print_exc()
+        ans['status'] = 400
+        ans['err_msg'] = str(e)
+        return ans
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=configs.port, debug=True)

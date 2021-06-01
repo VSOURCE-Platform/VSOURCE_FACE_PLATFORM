@@ -141,6 +141,7 @@
 
 <script src="https://libs.baidu.com/jquery/1.11.1/jquery.js"></script>
 <script src="/static/layui/layui.js"></script>
+<script src="/static/dist/zoomify.min.js"></script>
 <script>
 window.onload = function(){
     $.ajax(
@@ -163,6 +164,8 @@ window.onload = function(){
 
         }
     });
+
+    $('img').zoomify();
 }
 </script>
 <script>
@@ -215,9 +218,5 @@ layui.use(['element', 'table'], function(){
     window.location.reload();
   });
 });
-</script>
-<script src="/static/dist/zoomify.min.js"></script>
-<script type="text/javascript">
-	$('img').zoomify();
 </script>
 </html>

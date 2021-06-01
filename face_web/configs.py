@@ -53,6 +53,7 @@ app_speaker_storage_interface = '/speaker_upload'
 app_speaker_storage_getfile_interface = '/get_speaker_file'
 
 face_detection_url = 'http://face_detection:20001/face_detection'
+face_detection_with_box_url = 'http://face_detection:20001/face_detection_with_box'
 face_detection_upload_url = 'http://face_storage:12350/face_detection_upload'
 face_detection_get_url    = 'http://face_storage:12350/get_face_detection_file'
 
