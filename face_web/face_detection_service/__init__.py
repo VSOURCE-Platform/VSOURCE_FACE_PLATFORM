@@ -54,21 +54,9 @@ def face_detection_submit():
 def get_face_detection_result():
     ans = {'status': 200, 'err_msg': ''}
     try:
-        uu_id = request.args.get('id')
-        uu_id = str(uu_id)
-
-        r = redis.Redis(host=configs.app_redis_hostname, port=configs.app_redis_port)
-        if r.get(uu_id):
-            print('From redis get this result.')
-            return r.get(uu_id)
-        else:
-            auth_ans = db.authenticate(name=configs.app_database_user, password=configs.app_database_pwd)
-            result = db[configs.app_face_detection_table_name].find_one({'id': uu_id})
-            result.pop('_id')
-            ans['result'] = result
-            r.set(uu_id, ans)
-            r.expire(uu_id, configs.app_redis_expire_time)
-            print('Write into redis')
+        image_path = request.args.get('image_path')
+        response = requests.get(configs.face_detection_with_box_url, params={'image_path': image_path})
+        ans = json.loads(response.content)
     except Exception as e:
         ans['status'] = 500
         ans['err_msg'] = str(e)
