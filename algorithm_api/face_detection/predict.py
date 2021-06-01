@@ -56,7 +56,7 @@ def face_detection():
         return ans
 
 @app.route('/face_detection_with_box')
-def face_detection():
+def face_detection_with_box():
     ans = {'status': 200, 'err_msg': ''}
     try:
         image_path = flask.request.args.get('image_path')
