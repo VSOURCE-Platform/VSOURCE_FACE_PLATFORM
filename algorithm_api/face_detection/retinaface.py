@@ -200,15 +200,16 @@ class Retinaface(object):
         for b in results:
             each_ans = {
                 'box': [0, 0, 0, 0],
-                'score': 0,
+                'confidence': 0,
                 'landmarks': []
             }
             b = list(map(int, b))
+            confidence = b[4].astype(float)
             each_ans['box'][0] = b[0]
             each_ans['box'][1] = b[1]
             each_ans['box'][2] = b[2]
             each_ans['box'][3] = b[3]
-            each_ans['score'] = float(b[4])
+            each_ans['confidence'] = confidence
             landmarks = [
                 (b[5], b[6]),
                 (b[7], b[8]),
