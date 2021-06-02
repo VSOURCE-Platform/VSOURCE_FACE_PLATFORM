@@ -19,9 +19,11 @@ def get_data_from_page_limit(page, limit):
         _message['status'] = each_result['status']
         _message['createDate'] = each_result['create_date']
         _message['face_name1'] = each_result['face_name1']
-        _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_face_detection_file/{}\">'.format( each_result['face_name1'])
+        # _message['face_name1'] = '<img width=\"50px\" height=\"50px\" src=\"/get_face_detection_file/{}\">'.format( each_result['face_name1'])
+        _message['face_name1'] = "/get_face_detection_file/" + each_result['face_name1']
         _message['face_name2'] = each_result['face_name2']
-        _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_face_detection_file/{}\">'.format(each_result['face_name2'])
+        # _message['face_name2'] = '<img width=\"50px\" height=\"50px\" src=\"/get_face_detection_file/{}\">'.format(each_result['face_name2'])
+        _message['face_name2'] = "/get_face_detection_file/" + each_result['face_name2']
         if 'owner' not in dict(each_result).keys():
             _message['owner'] = 'debug'
         else:

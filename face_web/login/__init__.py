@@ -29,7 +29,16 @@ def login_required_and_redirect(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if not flask_login.current_user.is_authenticated:
-            return flask.redirect('/login_page')
+            redirect_dict = {
+                'face_dashboard_page': '/face_dashboard',
+                'speaker_dashboard_page': '/speaker_dashboard',
+                'face_detection_dashboard_page': '/face_detection_dashboard',
+            }
+            from_function = func.__name__
+            if from_function in redirect_dict.keys():
+                return flask.redirect(flask.url_for('page.login_page', pre_url=redirect_dict[func.__name__]))
+            else:
+                return flask.redirect('/login_page')
         return func(*args, **kwargs)
     return decorated_function
 

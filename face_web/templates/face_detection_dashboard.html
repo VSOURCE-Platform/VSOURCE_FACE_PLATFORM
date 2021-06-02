@@ -167,9 +167,7 @@ window.onload = function(){
 
 
 }
-$(document).ready(function (){
-  $('img').zoomify();
-});
+
 </script>
 <script>
 layui.use(['element', 'table'], function(){
@@ -188,10 +186,17 @@ layui.use(['element', 'table'], function(){
       {field: 'id', title: '任务id', width:100},
       {field: 'status', title: '任务状态', width:100},
       {field: 'createDate', title: '新建日期', align: 'center', width:180, sort: true},
-      {field: 'face_name1', title: '输入图像', align: 'center', width:200},
-      {field: 'face_name2', title: '输出图像', align: 'center', width:200},
+      {field: 'face_name1', title: '输入图像', align: 'center', width:200, templet: function(d){
+        return '<img src="'+d.face_name1+'" alt="" width="50px" height="50px"></a>';
+      }},
+      {field: 'face_name2', title: '输出图像', align: 'center', width:200, templet: function(d){
+        return '<img src="'+d.face_name2+'" alt="" width="50px" height="50px"></a>';
+      }},
 ///      {field: 'owner', title: '', align: 'center', width:100}
-    ]]
+    ]],
+    done: function(){
+      $('img').zoomify();
+    }
   });
 
   $('#newButton').on('click', function(){

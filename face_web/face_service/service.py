@@ -40,6 +40,8 @@ def get_data_from_page_limit(page, limit):
             _message['id'] = each_request['id']
             _message['status'] = each_request['status']
             _message['createDate'] = each_request['create_date']
+            _message['face_name1'] = "/get_image_file/" + each_result['face_name1']
+            _message['face_name2'] = "/get_image_file/" +  each_result['face_name2']
             if 'owner' not in dict(each_request).keys():
                 _message['owner'] = 'debug'
             else:
