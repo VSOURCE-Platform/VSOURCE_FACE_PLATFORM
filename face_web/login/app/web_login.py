@@ -26,7 +26,8 @@ def login():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
-        print(username, password)
+        remember = request.form.get('remember')
+        pre_url = request.form.get('preurl')
         if not db_login.verify_login(username=username, password=password):
             app.logger.error("{} 登录失败".format(username))
             rsp = flask.jsonify({'status': 400, 'message': "Not Valid"})
@@ -39,7 +40,10 @@ def login():
             # 是apiuser的话三天失效，且持续记住
             flask_login.login_user(user_instance, remember=True, duration=datetime.timedelta(days=3))
         else:
-            flask_login.login_user(user_instance)
+            if remember == 'true':
+                flask_login.login_user(user_instance, remember=True)
+            else:
+                flask_login.login_user(user_instance, remember=False)
         lock.release()
         app.logger.info("{}({}) 登录成功".format(username, db_login.get_user_permission_from_user_id(username)))
         rsp = flask.jsonify({'status': 200, 'message': "OK"})

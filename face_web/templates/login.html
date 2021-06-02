@@ -69,6 +69,11 @@ window.onload = function(){
 }
 </script>
 <script>
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]); return null;
+}
 layui.use('layer', function(){
   $('#submitBtn').on('click', function(){
     console.log($("#email-address").val());
@@ -79,11 +84,13 @@ layui.use('layer', function(){
       data:{
           username:$("#email-address").val(),
           password:$("#password").val(),
-          remember:$("#remember_me")[0].checked
+          remember:$("#remember_me")[0].checked,
+          preurl: getUrlParam('pre_url'),
       },
       success:function (data) {
           if(data.status == 200){
-              window.location.href = '/';
+              var preurl = getUrlParam('pre_url');
+              window.location.href = preurl;
               console.log('login success!');
           }else{
               layer.msg("登陆失败，用户名和密码不正确");
