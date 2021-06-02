@@ -90,7 +90,7 @@
 			scaleY     = Math.min(nHeight, wHeight * this.options.scale) / height,
 			scale      = Math.min(scaleX, scaleY),
 			translateX = (-offset.left + (wWidth - width) / 2) / scale,
-			translateY = (-offset.top + (wHeight - height) / 2 + $(document).scrollTop()) / scale;
+			translateY = (-offset.top + (wHeight - height) / 4 + $(document).scrollTop()) / scale;
 		console.log(translateX, translateY);
 		this.transform(transform);
 		
