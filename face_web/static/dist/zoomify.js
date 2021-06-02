@@ -80,8 +80,10 @@
 		this.transform('none');
 		
 		var offset     = this.$image.offset(),
-			width      = this.$image.outerWidth(),
-			height     = this.$image.outerHeight(),
+//			width      = this.$image.outerWidth(),
+//			height     = this.$image.outerHeight(),
+            width      = $("body").width(),
+            height     = $("body").height(),
 			nWidth     = this.$image[0].naturalWidth || +Infinity,
 			nHeight    = this.$image[0].naturalHeight || +Infinity,
 			wWidth     = $(window).width(),
