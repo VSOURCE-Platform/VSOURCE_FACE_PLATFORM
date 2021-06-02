@@ -80,10 +80,8 @@
 		this.transform('none');
 		
 		var offset     = this.$image.offset(),
-//			width      = this.$image.outerWidth(),
-//			height     = this.$image.outerHeight(),
-            width      = $("body").width(),
-            height     = $("body").height(),
+			width      = this.$image.outerWidth(),
+			height     = this.$image.outerHeight(),
 			nWidth     = this.$image[0].naturalWidth || +Infinity,
 			nHeight    = this.$image[0].naturalHeight || +Infinity,
 			wWidth     = $(window).width(),
@@ -93,7 +91,7 @@
 			scale      = Math.min(scaleX, scaleY),
 			translateX = (-offset.left + (wWidth - width) / 2) / scale,
 			translateY = (-offset.top + (wHeight - height) / 2 + $(document).scrollTop()) / scale;
-		
+		console.log(translateX, translateY);
 		this.transform(transform);
 		
 		this._zooming = true;

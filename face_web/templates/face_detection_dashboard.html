@@ -141,7 +141,7 @@
 
 <script src="https://libs.baidu.com/jquery/1.11.1/jquery.js"></script>
 <script src="/static/layui/layui.js"></script>
-<script src="/static/dist/zoomify.min.js"></script>
+<script src="/static/dist/zoomify.js"></script>
 <script>
 window.onload = function(){
     $.ajax(
@@ -165,7 +165,10 @@ window.onload = function(){
         }
     });
 
-    $('img').zoomify();
+
+}
+$(window).ready() = function (){
+  $('img').zoomify();
 }
 </script>
 <script>
