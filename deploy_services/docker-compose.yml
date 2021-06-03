@@ -36,7 +36,6 @@ services:
     networks:
       - face_services
 
-
   face_storage:
     build: ./face_storage
     ports:
