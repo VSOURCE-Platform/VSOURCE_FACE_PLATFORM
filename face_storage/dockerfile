@@ -11,5 +11,5 @@ RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip3 install -r requirements.txt
 
 # 使用gunicorn启动应用
-CMD gunicorn -w 4 -b 0.0.0.0:12350 run:app
+CMD gunicorn -w 5 -b 0.0.0.0:12350 run:app
 # CMD python -u run.py

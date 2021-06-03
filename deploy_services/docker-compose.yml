@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   face_detection:
-    build: ./algorithm_api/face_detection
+    build: ../algorithm_api/face_detection
     volumes:
       - ../algorithm_api/face_detection:/work
     ports:
@@ -12,21 +12,21 @@ services:
       - face_services
 
   face_calculator:
-    build: ./face_calculator
+    build: ../face_calculator
     volumes:
       - ../face_calculator:/work
     networks:
       - face_services
 
   speaker_calculator:
-    build: ./speaker_calculator
+    build: ../speaker_calculator
     volumes:
       - ../speaker_calculator:/work
     networks:
       - face_services
 
   face_web:
-    build: ./face_web
+    build: ../face_web
     ports:
       - "12349:12349"
     volumes:
@@ -37,7 +37,7 @@ services:
       - face_services
 
   face_storage:
-    build: ./face_storage
+    build: ../face_storage
     ports:
       - "12350:12350"
     volumes:
@@ -48,14 +48,14 @@ services:
       - face_services
 
   face_collector:
-    build: ./face_collector
+    build: ../face_collector
     volumes:
       - ../face_collector:/work
     networks:
       - face_services
 
   face_request_db:
-    build: ./face_request_db
+    build: ../face_request_db
     volumes:
       - ../face_request_db:/work
     networks:
