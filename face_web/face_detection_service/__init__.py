@@ -28,15 +28,15 @@ face_detection_service_print = flask.Blueprint('face_detection_service_print', _
 @upper_visitor
 def face_detection_submit():
     ans = {'status': 200, 'err_msg': ''}
+    info = {
+        'id': str(uuid.uuid1()),
+        'status': 'unfinished',
+        'owner': flask_login.current_user.id,
+        'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    }
     try:
         face_name = flask.request.form.get('face_name')
-        info = {
-            'id': str(uuid.uuid1()),
-            'face_name1': face_name,
-            'status': 'unfinished',
-            'owner': flask_login.current_user.id,
-            'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        }
+        info['face_name1'] = face_name
         face_detection_url = configs.face_detection_url
         response = requests.get(face_detection_url, params={'image_path': face_name})
         response_dict = json.loads(response.content)
@@ -46,6 +46,9 @@ def face_detection_submit():
     except Exception as e:
         ans['status'] = 500
         ans['err_msg'] = str(e)
+        info['status'] = 'error'
+        info['err_msg'] = str(e)
+        db[configs.app_face_detection_table_name].insert_one(info)
     return ans
 
 
@@ -53,13 +56,28 @@ def face_detection_submit():
 @upper_visitor
 def get_face_detection_result():
     ans = {'status': 200, 'err_msg': ''}
+    info = {
+        'id': str(uuid.uuid1()),
+        'status': 'unfinished',
+        'owner': flask_login.current_user.id,
+        'create_date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    }
     try:
         image_path = request.args.get('image_path')
-        response = requests.get(configs.face_detection_with_box_url, params={'image_path': image_path})
-        ans = json.loads(response.content)
+        info['face_name1'] = image_path
+        face_detection_url = configs.face_detection_url
+        response = requests.get(face_detection_url, params={'image_path': image_path})
+        response_dict = json.loads(response.content)
+        info['face_name2'] = response_dict['return_path']
+        info['status'] = 'finished'
+        info['result'] = response_dict['result']
+        db[configs.app_face_detection_table_name].insert_one(info)
     except Exception as e:
         ans['status'] = 500
         ans['err_msg'] = str(e)
+        info['status'] = 'error'
+        info['err_msg'] = str(e)
+        db[configs.app_face_detection_table_name].insert_one(info)
     return ans
 
 
