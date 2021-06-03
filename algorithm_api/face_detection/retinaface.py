@@ -31,7 +31,7 @@ class Retinaface(object):
         #   可根据输入图像的大小自行调整input_shape，注意为32的倍数，如[640, 640, 3]
         #----------------------------------------------------------------------#
         "input_shape"       : [1280, 1280, 3],
-        "letterbox_image"   : True
+        "letterbox_image"   : False
     }
 
     @classmethod
@@ -54,69 +54,39 @@ class Retinaface(object):
         self.generate()
         self.anchors = Anchors(self.cfg, image_size=(self.input_shape[0], self.input_shape[1])).get_anchors()
 
-    #---------------------------------------------------#
-    #   载入模型
-    #---------------------------------------------------#
     def generate(self):
         model_path = os.path.expanduser(self.model_path)
         assert model_path.endswith('.h5'), 'Keras model or weights must be a .h5 file.'
 
-        #-------------------------------#
-        #   载入模型与权值
-        #-------------------------------#
         self.retinaface = RetinaFace(self.cfg, self.backbone)
         self.retinaface.load_weights(self.model_path,by_name=True)
         print('{} model, anchors, and classes loaded.'.format(model_path))
 
-    #---------------------------------------------------#
-    #   检测图片
-    #---------------------------------------------------#
     def detect_image(self, image):
-        #---------------------------------------------------#
-        #   对输入图像进行一个备份，后面用于绘图
-        #---------------------------------------------------#
         old_image = image.copy()
 
         image = np.array(image, np.float32)
         im_height, im_width, _ = np.shape(image)
 
-        #---------------------------------------------------#
-        #   计算scale，用于将获得的预测框转换成原图的高宽
-        #---------------------------------------------------#
         scale = [np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0]]
         scale_for_landmarks = [np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0],
                                             np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0],
                                             np.shape(image)[1], np.shape(image)[0]]
 
-        #---------------------------------------------------------#
-        #   letterbox_image可以给图像增加灰条，实现不失真的resize
-        #---------------------------------------------------------#
         if self.letterbox_image:
             image = letterbox_image(image, [self.input_shape[1], self.input_shape[0]])
         else:
             self.anchors = Anchors(self.cfg, image_size=(im_height, im_width)).get_anchors()
-            
-        #-----------------------------------------------------------#
-        #   图片预处理，归一化。
-        #-----------------------------------------------------------#
+
         photo = np.expand_dims(preprocess_input(image),0)
         
         preds = self.retinaface.predict(photo)
-        #-----------------------------------------------------------#
-        #   将预测结果进行解码
-        #-----------------------------------------------------------#
         results = self.bbox_util.detection_out(preds, self.anchors, confidence_threshold=self.confidence)
 
-        #--------------------------------------#
-        #   如果没有检测到物体，则返回原图
-        #--------------------------------------#
-        if len(results)<=0:
-            return old_image
+        if len(results) <= 0:
+            return old_image, []
 
         results = np.array(results)
-        #---------------------------------------------------------#
-        #   如果使用了letterbox_image的话，要把灰条的部分去除掉。
-        #---------------------------------------------------------#
         if self.letterbox_image:
             results = retinaface_correct_boxes(results, np.array([self.input_shape[0], self.input_shape[1]]), np.array([im_height, im_width]))
         
@@ -140,7 +110,6 @@ class Retinaface(object):
             each_ans['box'][3] = b[3]
             each_ans['confidence'] = confidence
             
-            # b[0]-b[3]为人脸框的坐标，b[4]为得分
             cv2.rectangle(old_image, (b[0], b[1]), (b[2], b[3]), (0, 0, 255), 2)
             cx = b[0]
             cy = b[1] + 12
@@ -148,7 +117,6 @@ class Retinaface(object):
                         cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255))
 
             print(b[0], b[1], b[2], b[3], b[4])
-            # b[5]-b[14]为人脸关键点的坐标
             cv2.circle(old_image, (b[5], b[6]), 1, (0, 0, 255), 4)
             cv2.circle(old_image, (b[7], b[8]), 1, (0, 255, 255), 4)
             cv2.circle(old_image, (b[9], b[10]), 1, (255, 0, 255), 4)
