@@ -14,6 +14,9 @@ app_redis_expire_time = 60 * 5
 app_info_key = 'INFO_KEY'
 app_response_key = 'RESPONSE_KEY'
 app_result_key = 'RESULT_KEY'
+app_face_detection_info_key = 'FACE_DETECTION_INFO_KEY'
+app_face_detection_response_key = 'FACE_DETECTION_RESPONSE_KEY'
+app_face_detection_error_key = 'FACE_DETECTION_ERROR_KEY'
 
 app_kafka_host = 'my_kafka:9092'
 app_kafka_topic = 'user_queue'

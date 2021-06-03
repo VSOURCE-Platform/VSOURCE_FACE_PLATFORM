@@ -123,9 +123,22 @@ class Retinaface(object):
         results[:,:4] = results[:,:4]*scale
         results[:,5:] = results[:,5:]*scale_for_landmarks
 
+        ans = []
         for b in results:
+            confidence = b[4].astype(float)
+            each_ans = {
+                'box': [0, 0, 0, 0],
+                'confidence': 0,
+                'landmarks': []
+            }
             text = "{:.4f}".format(b[4])
             b = list(map(int, b))
+
+            each_ans['box'][0] = b[0]
+            each_ans['box'][1] = b[1]
+            each_ans['box'][2] = b[2]
+            each_ans['box'][3] = b[3]
+            each_ans['confidence'] = confidence
             
             # b[0]-b[3]为人脸框的坐标，b[4]为得分
             cv2.rectangle(old_image, (b[0], b[1]), (b[2], b[3]), (0, 0, 255), 2)
@@ -141,75 +154,6 @@ class Retinaface(object):
             cv2.circle(old_image, (b[9], b[10]), 1, (255, 0, 255), 4)
             cv2.circle(old_image, (b[11], b[12]), 1, (0, 255, 0), 4)
             cv2.circle(old_image, (b[13], b[14]), 1, (255, 0, 0), 4)
-        return old_image
-
-    def detect_image_with_box(self, image):
-        # ---------------------------------------------------#
-        #   对输入图像进行一个备份，后面用于绘图
-        # ---------------------------------------------------#
-        old_image = image.copy()
-
-        image = np.array(image, np.float32)
-        im_height, im_width, _ = np.shape(image)
-
-        # ---------------------------------------------------#
-        #   计算scale，用于将获得的预测框转换成原图的高宽
-        # ---------------------------------------------------#
-        scale = [np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0]]
-        scale_for_landmarks = [np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0],
-                               np.shape(image)[1], np.shape(image)[0], np.shape(image)[1], np.shape(image)[0],
-                               np.shape(image)[1], np.shape(image)[0]]
-
-        # ---------------------------------------------------------#
-        #   letterbox_image可以给图像增加灰条，实现不失真的resize
-        # ---------------------------------------------------------#
-        if self.letterbox_image:
-            image = letterbox_image(image, [self.input_shape[1], self.input_shape[0]])
-        else:
-            self.anchors = Anchors(self.cfg, image_size=(im_height, im_width)).get_anchors()
-
-        # -----------------------------------------------------------#
-        #   图片预处理，归一化。
-        # -----------------------------------------------------------#
-        photo = np.expand_dims(preprocess_input(image), 0)
-
-        preds = self.retinaface.predict(photo)
-        # -----------------------------------------------------------#
-        #   将预测结果进行解码
-        # -----------------------------------------------------------#
-        results = self.bbox_util.detection_out(preds, self.anchors, confidence_threshold=self.confidence)
-
-        # --------------------------------------#
-        #   如果没有检测到物体，则返回原图
-        # --------------------------------------#
-        if len(results) <= 0:
-            return old_image
-
-        results = np.array(results)
-        # ---------------------------------------------------------#
-        #   如果使用了letterbox_image的话，要把灰条的部分去除掉。
-        # ---------------------------------------------------------#
-        if self.letterbox_image:
-            results = retinaface_correct_boxes(results, np.array([self.input_shape[0], self.input_shape[1]]),
-                                               np.array([im_height, im_width]))
-
-        results[:, :4] = results[:, :4] * scale
-        results[:, 5:] = results[:, 5:] * scale_for_landmarks
-
-        ans = []
-        for b in results:
-            confidence = b[4].astype(float)
-            each_ans = {
-                'box': [0, 0, 0, 0],
-                'confidence': 0,
-                'landmarks': []
-            }
-            b = list(map(int, b))
-            each_ans['box'][0] = b[0]
-            each_ans['box'][1] = b[1]
-            each_ans['box'][2] = b[2]
-            each_ans['box'][3] = b[3]
-            each_ans['confidence'] = confidence
             landmarks = [
                 (b[5], b[6]),
                 (b[7], b[8]),
@@ -219,4 +163,4 @@ class Retinaface(object):
             ]
             each_ans['landmarks'] = landmarks
             ans.append(each_ans)
-        return ans
+        return old_image, ans
