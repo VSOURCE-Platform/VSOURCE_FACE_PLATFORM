@@ -71,7 +71,7 @@ def get_face_detection_result():
         info['face_name2'] = response_dict['return_path']
         info['status'] = 'finished'
         info['result'] = response_dict['result']
-        ans['result'] = info
+        ans['result'] = info['result']
         db[configs.app_face_detection_table_name].insert_one(info)
     except Exception as e:
         ans['status'] = 500
