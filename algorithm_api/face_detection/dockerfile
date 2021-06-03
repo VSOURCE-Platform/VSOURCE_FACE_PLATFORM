@@ -12,7 +12,9 @@ RUN pip install keras==2.1.5
 RUN pip install numpy==1.18.5
 RUN pip install requests
 RUN pip install flask
+RUN pip install gunicorn==20.1.0
 RUN pip install h5py==2.10.0
 # RUN pip install requirements.txt
 WORKDIR /work
-CMD python -u predict.py
+# CMD python -u predict.py
+CMD gunicorn -w 2 -b 0.0.0.0:20001 predict:app
