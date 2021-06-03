@@ -40,7 +40,7 @@ VSOURCE团队开源一个精美的支持弹性编排的人脸算法平台，支�
 1. 有一台装有docker和docker-compose的机器。
 2. 有人脸验证算法服务的参数，当然没有的话页面可以正常的启动，只是人脸的服务无法使用，关于参数的获取见下方。
 
-满足条件后，下载本项目，在项目目录下cd进入face_service_deploy，并且docker-compose up即可启动服务。
+满足条件后，下载本项目，在项目目录下cd进入deploy_middleware，先docker-compose up启动中间件服务，然后cd进入deploy_services并且docker-compose up即可启动所有的服务。
 
 启动服务需要一段的时间（大概1分钟左右），在日志稳定后，即可调用http://localhost:12349查看页面，默认的用户名和密码分别是xxxxxx@qq.com和xxxxxx123。
 

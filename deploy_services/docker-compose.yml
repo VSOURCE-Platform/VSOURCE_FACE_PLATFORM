@@ -11,61 +11,10 @@ services:
     networks:
       - face_services
 
-  my_redis:
-    build: ./my_redis
-    ports:
-      - "6379:6379"
-    networks:
-      - face_services
-
-
-  my_zookeeper:
-    build: ./my_zookeeper
-    ports:
-      - "2181:2181"
-    logging:
-      driver: "none"
-    networks:
-      - face_services
-
-  my_kafka:
-    build: ./my_kafka
-    ports:
-      - "9092:9092"
-    restart: always
-    logging:
-      driver: "none"
-    depends_on:
-      - my_zookeeper
-    networks:
-      - face_services
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: my_zookeeper:2181
-      KAFKA_ADVERTISED_HOST_NAME: my_kafka
-#      KAFKA_CREATE_TOPICS: "user_queue:1:1"
-
-  my_mongo:
-    build: ./my_mongo
-    volumes:
-      - "../mongo_db:/data/db"
-    logging:
-      driver: "none"
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: my_root
-      MONGO_INITDB_ROOT_PASSWORD: my_123456
-    networks:
-      - face_services
-
   face_calculator:
     build: ./face_calculator
     volumes:
       - ../face_calculator:/work
-    depends_on:
-      - my_kafka
-      - my_redis
-      - my_zookeeper
     networks:
       - face_services
 
@@ -73,10 +22,6 @@ services:
     build: ./speaker_calculator
     volumes:
       - ../speaker_calculator:/work
-    depends_on:
-      - my_kafka
-      - my_redis
-      - my_zookeeper
     networks:
       - face_services
 
@@ -116,10 +61,7 @@ services:
       - ../face_request_db:/work
     networks:
       - face_services
-    depends_on:
-      - my_kafka
-      - my_mongo
-      - my_zookeeper
 
 networks:
   face_services:
+    external: true
