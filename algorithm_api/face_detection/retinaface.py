@@ -21,8 +21,8 @@ class Retinaface(object):
     _defaults = {
         "model_path"        : 'model_data/retinaface_mobilenet025.h5',
         "backbone"          : 'mobilenet',
-        "confidence"        : 0.5,
-        "nms_iou"           : 0.45,
+        "confidence"        : 0.6,
+        "nms_iou"           : 0.4,
         #----------------------------------------------------------------------#
         #   是否需要进行图像大小限制。
         #   开启后，会将输入图像的大小限制为input_shape。否则使用原图进行预测。
