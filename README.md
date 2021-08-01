@@ -12,7 +12,7 @@ VSOURCE团队开源一个精美的支持弹性编排的人脸算法平台，支�
 
 ### 一、预览
 
-![face_preview](http://ecohnoch.cn/img/face_preview.png)
+![face_preview](https://ecohnoch.cn/img/face_preview.png)
 
 具有以下功能：
 
@@ -24,7 +24,7 @@ VSOURCE团队开源一个精美的支持弹性编排的人脸算法平台，支�
 
 架构图如下所示：
 
-![face_structure](http://ecohnoch.cn/img/face_structure.png)
+![face_structure](https://ecohnoch.cn/img/face_structure.png)
 
 正常的一个人脸验证的流程是：（1）用户向网页上传两张人脸图像，（2）用户向网页提交了一个表单请求，（3）服务器处理这个请求，并且调用人脸识别算法来计算两者相似分数，包装成一个响应返回，并记录数据库，（4）用户查看响应结果。
 
